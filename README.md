@@ -1,30 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <h3 align="center">SimResolvemos Frontemd</h3>
+  <p align="center">
+    The official SimResolvemos web app 
+  </p>
+  <p align="center">
+    <a href="https://nextjs.org/">
+      <img src="https://img.shields.io/badge/frontend-Next-%23000000?style=for-the-badge&logo=next.js" alt="Built with Next">
+    </a>
+    <a href="https://www.typescriptlang.org/">
+      <img src="https://img.shields.io/badge/types-typescript-%23007ACC?style=for-the-badge&logo=typescript" alt="Built with Typescript">
+    </a>
+    <a href="https://tailwindcss.com/">
+      <img src="https://img.shields.io/badge/styling-tailwind-%2338B2AC?style=for-the-badge&logo=tailwind%20css" alt="Built with Typescript">
+    </a>
+  </p>
+</p>
+
+<!-- TABLE OF CONTENTS -->
+
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Compiles and hot-reloads for development](#compiles-and-hot-reloads-for-development)
+  - [Compiles and minifies for production](#compiles-and-minifies-for-production)
+- [Contributing](#contributing)
+
+<!-- ABOUT THE PROJECT -->
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running follow these simple steps.
 
-```bash
-npm run dev
-# or
+### Prerequisites
+
+`yarn` installed on your local machine.
+
+### Installation
+
+1. Clone the repo
+
+```sh
+git clone https://github.com/TGlide/simresolvemos-frontend.git
+cd simresolvemos-frontend
+```
+
+2. Install Yarn dependencies
+
+```sh
+yarn
+```
+
+## Usage
+
+### Compiles and hot-reloads for development
+
+```
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Compiles and minifies for production
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```
+yarn build
+```
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Create your Feature/Refactor/Fix Branch (`git checkout -b feature/AmazingFeature`)
+2. Commit your Changes (`git cz`) and follow commitizen instructions
+3. Push to the Branch (`git push origin feature/AmazingFeature`)
+4. Open a Draft Pull Request
+5. Fill in and meet all the criteria on the Pull Request template
+6. Request reviews
