@@ -5,7 +5,7 @@ import { useState } from "react";
 const links = [
   {
     name: "Enviar Tarefa",
-    to: "/about",
+    to: "/tasks",
   },
   {
     name: "Trabalhe conosco",

@@ -7,7 +7,9 @@ function MyApp({ Component, pageProps }) {
     <>
       <div className="relative lg:container lg:px-12">
         <Navbar />
-        <Component {...pageProps} />
+        <div className="min-h-screen">
+          <Component {...pageProps} />
+        </div>
       </div>
       <Footer />
     </>
