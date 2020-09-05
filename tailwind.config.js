@@ -4,6 +4,21 @@ module.exports = {
     container: {
       center: true,
     },
+    customForms: (theme) => ({
+      default: {
+        input: {
+          borderRadius: theme("borderRadius.lg"),
+          "&:focus": {
+            boxShadow: theme("boxShadow.none"),
+            borderColor: theme("colors.land-green"),
+          },
+          "&:hover": {
+            boxShadow: theme("boxShadow.none"),
+            borderColor: theme("colors.land-green"),
+          },
+        },
+      },
+    }),
     extend: {
       colors: {
         "sea-blue": "#1B9CFC",
