@@ -10,4 +10,30 @@ body {
   @apply box-border;
 }
 
+.tooltip-container {
+  @apply relative;
+}
+
+.tooltip-box {
+  @apply hidden;
+  @apply absolute;
+  @apply bottom-0;
+  @apply mb-6;
+  @apply -ml-1;
+  @apply w-56;
+  @apply opacity-0;
+  @apply transition;
+  @apply ease-in;
+  @apply duration-100;
+}
+
+.tooltip-container:hover {
+  cursor: pointer;
+}
+
+.tooltip-container:hover .tooltip-box {
+  @apply block;
+  @apply opacity-100;
+}
+
 @tailwind utilities;
