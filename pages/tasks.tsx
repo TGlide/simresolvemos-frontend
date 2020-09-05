@@ -16,10 +16,17 @@ export default function Tasks() {
 
   const [taskData, setTaskData] = useState<{ [key: string]: any }>({});
   const [stepNumber, setStepNumber] = useState(0);
-  const { register, handleSubmit, errors } = useForm<FormValues>();
+  const { register, handleSubmit, errors, setValue } = useForm<FormValues>({
+    mode: "all",
+  });
 
   // Handlers
+  const handleGoToStep = (step: number) => {
+    setStepNumber(step);
+  };
+
   const onSubmit = (data: FormValues) => {
+    console.log(stepNumber, stepTotal);
     if (stepNumber === stepTotal) return;
 
     const newTaskData = { ...taskData, ...data };
@@ -32,9 +39,38 @@ export default function Tasks() {
       alert("End of form!");
     }
   };
-  console.log(errors);
 
   // Renderers
+  const renderSteps = () => {
+    const steps = [];
+
+    for (let idx = 0; idx < stepTotal; idx++) {
+      const clickHandler =
+        idx > stepNumber ? undefined : () => handleGoToStep(idx);
+
+      let color = "bg-sea-blue";
+      let cursor = "cursor-default";
+
+      if (idx < stepNumber) {
+        color = "bg-land-green";
+        cursor = "cursor-pointer";
+      } else if (idx > stepNumber) color = "bg-transparent";
+
+      const step = (
+        <button
+          onClick={clickHandler}
+          key={idx}
+          className={`w-5 h-5 border-2 border-gray-500 border-opacity-50 border-solid rounded-full ${color} ${cursor} ${
+            idx !== stepTotal - 1 && "mr-8"
+          }`}
+        />
+      );
+      steps.push(step);
+    }
+
+    return steps;
+  };
+
   const renderFieldError = (
     fieldError: FieldError | undefined,
     message: string
@@ -52,12 +88,13 @@ export default function Tasks() {
         return (
           <fieldset key={stepNumber}>
             <label className="block">
-              <span className="text-gray-700">Tipo de tarefa</span>
+              <span>Tipo de tarefa</span>
               <input
                 type="text"
                 name="taskType"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                className="form-input mt-2 block w-full"
+                placeholder="Redação, dever de casa..."
               />
               {renderFieldError(
                 errors.taskType,
@@ -65,22 +102,24 @@ export default function Tasks() {
               )}
             </label>
             <label className="block mt-4">
-              <span className="text-gray-700">Grande área</span>
+              <span>Grande área</span>
               <input
                 type="text"
                 name="area"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                placeholder="Engenharia, Direito..."
+                className="form-input mt-2 block w-full"
               />
               {renderFieldError(errors.area, "Por favor especifique uma área")}
             </label>
             <label className="block mt-4">
-              <span className="text-gray-700">Matéria</span>
+              <span>Matéria</span>
               <input
                 type="text"
                 name="subject"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                placeholder="Cálculo, Fisiologia..."
+                className="form-input mt-2 block w-full"
               />
               {renderFieldError(
                 errors.subject,
@@ -88,12 +127,13 @@ export default function Tasks() {
               )}
             </label>
             <label className="block mt-4">
-              <span className="text-gray-700">Nível</span>
+              <span>Nível</span>
               <input
                 type="text"
                 name="level"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                placeholder="Ensino Médio, Faculdade..."
+                className="form-input mt-2 block w-full"
               />
               {renderFieldError(
                 errors.level,
@@ -105,39 +145,38 @@ export default function Tasks() {
       case 1:
         return (
           <fieldset key={stepNumber}>
-            <label className="block">
-              <span className="text-gray-700">Título da tarefa</span>
+            <label className="block ">
+              <span>Título da tarefa</span>
               <input
                 type="text"
                 name="title"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                className="form-input mt-2 block w-full"
               />
               {renderFieldError(
                 errors.title,
                 "Por favor especifique o título de tarefa"
               )}
             </label>
-            <label className="block">
-              <span className="text-gray-700">Descrição</span>
-              <input
-                type="text"
+            <label className="block mt-4">
+              <span>Descrição</span>
+              <textarea
                 name="description"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                className="form-textarea mt-2 block w-full"
               />
               {renderFieldError(
                 errors.description,
                 "Por favor descreva brevemente a tarefa"
               )}
             </label>
-            <label className="block">
-              <span className="text-gray-700">Prazo de entrega</span>
+            <label className="block mt-4">
+              <span>Prazo de entrega</span>
               <input
                 type="text"
                 name="dueDate"
                 ref={register({ required: true })}
-                className="form-input mt-1 block w-full"
+                className="form-input mt-2 block w-full"
               />
               {renderFieldError(
                 errors.dueDate,
@@ -156,9 +195,14 @@ export default function Tasks() {
         <h1 className="font-header font-bold text-4xl ml-4">Enviar tarefa</h1>
       </header>
 
+      {/* Steps */}
+      <div className="flex justify-center items-center mt-4">
+        {renderSteps()}
+      </div>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
+        className="max-w-lg mx-auto mt-4 border-2 border-gray-400 border-solid rounded-lg p-6"
       >
         {renderFormFields()}
         <button
@@ -170,7 +214,8 @@ export default function Tasks() {
       </form>
 
       <div className="block mx-auto bg-study-black text-sea-blue p-6 mt-12 rounded">
-        {JSON.stringify(taskData)}
+        {JSON.stringify(taskData)} <br />
+        stepNumber: {stepNumber}
       </div>
     </div>
   );
