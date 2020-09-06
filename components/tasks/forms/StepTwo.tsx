@@ -1,7 +1,8 @@
-import { useForm, FieldError } from "react-hook-form";
+import { useForm, FieldError, Controller } from "react-hook-form";
 import { ReactNode, FormEvent, ChangeEvent, useState } from "react";
 import StepLayout, { renderFieldError } from "./StepLayout";
 import Tooltip from "../../shared/Tooltip";
+import InputMask from "react-input-mask";
 
 type FormValues = {
   title?: string;
@@ -17,7 +18,7 @@ type StepProps = {
 };
 
 export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
-  const { register, handleSubmit, errors, watch, setValue } = useForm<
+  const { register, handleSubmit, errors, watch, setValue, control } = useForm<
     FormValues
   >({
     defaultValues,
@@ -89,7 +90,10 @@ export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
 
       <label className="block mt-4">
         <span>Prazo de entrega</span>
-        <input
+        <Controller
+          as={<InputMask />}
+          control={control}
+          mask="99/99/9999 99:99"
           type="text"
           name="dueDate"
           ref={register({ required: true })}
