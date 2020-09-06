@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useState } from "react";
+import { useLogin, useDispatchLogin, LoginActions } from "./context/Login";
 
 const links = [
   {
@@ -28,6 +29,8 @@ const links = [
 export function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const router = useRouter();
+  const login = useLogin();
+  const dispatchLogin = useDispatchLogin();
 
   const extraLinksClass = () => {
     return navbarOpen ? "flex fixed top-0 left-0 bg-white" : "hidden lg:flex";
@@ -50,6 +53,12 @@ export function Navbar() {
 
   const handleNavbarClose = () => {
     setNavbarOpen(false);
+  };
+
+  const handleLogin = () => {
+    dispatchLogin({
+      type: login ? LoginActions.LOGOUT : LoginActions.LOGIN,
+    });
   };
 
   return (
@@ -93,6 +102,7 @@ export function Navbar() {
                 </Link>
               );
             })}
+            <span onClick={handleLogin}>Logged: {`${login}`}</span>
           </div>
           <button
             className="lg:hidden ml-auto w-8 h-8"
