@@ -1,19 +1,20 @@
-import { useForm, FieldError } from "react-hook-form";
+import { useForm, FieldError, Controller } from "react-hook-form";
 import { useState, ReactNode, useEffect } from "react";
+import InputMask from "react-input-mask";
 
 type FormValues = {
   name?: string;
   email?: string;
+  phone?: string;
   resume?: FileList;
 };
 
 export default function Tasks() {
-  const { register, handleSubmit, errors, watch, setValue } = useForm<
+  const { register, handleSubmit, errors, watch, setValue, control } = useForm<
     FormValues
   >({
     mode: "all",
   });
-
   const watchResume = watch("resume");
 
   const onSubmit = (data) => {
@@ -80,15 +81,18 @@ export default function Tasks() {
 
         <label className="block mt-4">
           <span>Telefone</span>
-          <input
+          <Controller
             type="text"
             name="phone"
-            ref={register({ required: true })}
+            control={control}
+            rules={{ required: true }}
             className="form-input mt-2 block w-full"
             placeholder="(21) 99999-9999"
+            mask="(99) 99999-9999"
+            as={<InputMask />}
           />
           {renderFieldError(
-            errors.name,
+            errors.phone,
             "Por favor digite um telefone para contato"
           )}
         </label>
