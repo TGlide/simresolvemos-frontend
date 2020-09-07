@@ -20,10 +20,6 @@ const links = [
     name: "Recursos",
     to: "/blog",
   },
-  {
-    name: "Login",
-    to: "/about",
-  },
 ];
 
 export function Navbar() {
@@ -102,6 +98,18 @@ export function Navbar() {
                 </Link>
               );
             })}
+
+            {login ? (
+              <button className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8">
+                Logout
+              </button>
+            ) : (
+              <Link href="/auth/login">
+                <a className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8">
+                  Login
+                </a>
+              </Link>
+            )}
           </div>
           <button
             className="lg:hidden ml-auto w-8 h-8"

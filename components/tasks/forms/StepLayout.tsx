@@ -23,7 +23,7 @@ export default function StepLayout({ onSubmit, children }: StepLayoutProps) {
     >
       {children}
       <button
-        className="block bg-land-green mx-auto mt-8 rounded-full p-2"
+        className="block bg-land-green mx-auto mt-8 rounded-full p-2  hover:opacity-75"
         type="submit"
       >
         <img src="/vectors/arrow-right.svg" alt="Próximo" />

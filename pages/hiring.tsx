@@ -109,7 +109,7 @@ export default function Tasks() {
         </label>
 
         <button
-          className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2"
+          className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2 hover:opacity-75"
           type="submit"
         >
           Enviar

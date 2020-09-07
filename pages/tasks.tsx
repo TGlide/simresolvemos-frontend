@@ -80,11 +80,6 @@ export default function Tasks() {
           defaultValues={stepsData[1] || undefined}
         />
       )}
-
-      <div className="block mx-auto bg-study-black text-sea-blue p-6 mt-12 rounded">
-        stepsData: {JSON.stringify(stepsData)} <br />
-        stepNumber: {stepNumber}
-      </div>
     </div>
   );
 }
