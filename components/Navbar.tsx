@@ -18,7 +18,7 @@ const links = [
   },
   {
     name: "Recursos",
-    to: "/about",
+    to: "/blog",
   },
   {
     name: "Login",
