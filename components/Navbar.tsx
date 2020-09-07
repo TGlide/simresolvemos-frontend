@@ -102,7 +102,6 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <span onClick={handleLogin}>Logged: {`${login}`}</span>
           </div>
           <button
             className="lg:hidden ml-auto w-8 h-8"

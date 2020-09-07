@@ -12,7 +12,9 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^6.7.2",
-    "react-input-mask": "^3.0.0-alpha.2"
+    "react-input-mask": "^3.0.0-alpha.2",
+    "react-slick": "^0.27.11",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@tailwindcss/custom-forms": "^0.2.1",
