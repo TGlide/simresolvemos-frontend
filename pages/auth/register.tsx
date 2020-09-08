@@ -1,9 +1,19 @@
-import { useForm, FieldError } from "react-hook-form";
-import { ReactNode } from "react";
+import InputMask from "react-input-mask";
+
+import {
+  useForm,
+  FieldError,
+  Controller,
+  SubmitHandler,
+} from "react-hook-form";
+import { ReactNode, useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useStoreActions } from "../../store";
 
 type FormValues = {
   name?: string;
+  phone?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
@@ -16,16 +26,26 @@ export default function Register() {
     mode: "all",
   });
   const watchPassword = watch("password");
+  const router = useRouter();
+  const { fromTask } = router.query;
+  const [showPage, setShowPage] = useState(false);
+  const login = useStoreActions((state) => state.user.login);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  useEffect(() => {
+    setShowPage(true);
+  }, []);
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    login({ data: { name: data.name, email: data.email } });
+    if (fromTask) {
+      alert("Task sent!");
+    }
   };
 
   const renderFieldError = (
     fieldError: FieldError | undefined,
     message: string
   ): ReactNode | null => {
-    console.log(fieldError);
     if (fieldError) {
       if (fieldError.type === "minLength") {
         return (
@@ -42,16 +62,26 @@ export default function Register() {
   };
 
   const validateConfirmedPassword = (value): boolean => {
-    console.log(value, watchPassword, value === watchPassword);
-
     return value === watchPassword;
   };
+
+  if (!showPage) return null;
 
   return (
     <div>
       <header className="flex justify-center items-center mt-4">
         <h1 className="font-header font-bold text-4xl ml-4">Cadastro</h1>
       </header>
+
+      {fromTask && (
+        <p className="max-w-3xl mx-auto text-center text-sm opacity-75 mt-2">
+          Faça seu cadastro, ou efetue seu{" "}
+          <Link href="/auth/login?fromTask=true">
+            <a className="text-sea-blue underline hover:opacity-75">login</a>
+          </Link>{" "}
+          para enviar a tarefa!
+        </p>
+      )}
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -61,12 +91,31 @@ export default function Register() {
           <span>Nome</span>
           <input
             type="text"
-            name="email"
+            name="name"
             ref={register({ required: true })}
             className="form-input mt-2 block w-full"
             placeholder="John Doe"
           />
           {renderFieldError(errors.name, "Por favor digite seu e-nome")}
+        </label>
+
+        <label className="block mt-4">
+          <span>Telefone</span>
+          <Controller
+            type="text"
+            name="phone"
+            control={control}
+            rules={{ required: true }}
+            className="form-input mt-2 block w-full"
+            placeholder="(21) 99999-9999"
+            mask="(99) 99999-9999"
+            defaultValue=""
+            as={<InputMask />}
+          />
+          {renderFieldError(
+            errors.phone,
+            "Por favor digite um telefone para contato"
+          )}
         </label>
 
         <label className="block mt-4">

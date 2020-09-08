@@ -1,7 +1,8 @@
-import { useForm, FieldError } from "react-hook-form";
+import { useForm, FieldError, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import Link from "next/link";
+import { useStoreActions } from "../../store";
 
 type FormValues = {
   email?: string;
@@ -16,9 +17,13 @@ export default function Login() {
   });
   const router = useRouter();
   const { fromTask } = router.query;
+  const login = useStoreActions((state) => state.user.login);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    login({ data: { name: "John Doe", email: data.email } });
+    if (fromTask) {
+      alert("Task sent!");
+    }
   };
 
   const renderFieldError = (

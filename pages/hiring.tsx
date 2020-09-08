@@ -9,13 +9,18 @@ type FormValues = {
   resume?: FileList;
 };
 
-export default function Tasks() {
+export default function Hiring() {
   const { register, handleSubmit, errors, watch, setValue, control } = useForm<
     FormValues
   >({
     mode: "all",
   });
   const watchResume = watch("resume");
+  const [showPage, setShowPage] = useState(false);
+
+  useEffect(() => {
+    setShowPage(true);
+  }, []);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -32,9 +37,7 @@ export default function Tasks() {
     return null;
   };
 
-  useEffect(() => {
-    console.log(watchResume);
-  }, [watchResume]);
+  if (!showPage) return null;
 
   return (
     <div>

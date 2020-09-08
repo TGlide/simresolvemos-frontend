@@ -23,6 +23,8 @@ interface UserModel {
     name: string;
     email: string;
   };
+  login: Action<UserModel, { data: { name: string; email: string } }>;
+  logout: Action<UserModel>;
 }
 
 interface StoreModel {
@@ -39,6 +41,14 @@ const taskModel: TaskModel = {
 
 const userModel: UserModel = {
   logged: false,
+  login: action((state, payload) => {
+    state.data = payload.data;
+    state.logged = true;
+  }),
+  logout: action((state) => {
+    state.data = undefined;
+    state.logged = false;
+  }),
 };
 
 const storeModel: StoreModel = {
