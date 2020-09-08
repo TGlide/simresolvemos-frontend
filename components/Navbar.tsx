@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { useLogin, useDispatchLogin, LoginActions } from "./context/Login";
+import { useStoreState } from "../store";
 
 const links = [
   {
@@ -25,8 +25,7 @@ const links = [
 export function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const router = useRouter();
-  const login = useLogin();
-  const dispatchLogin = useDispatchLogin();
+  const logged = useStoreState((state) => state.user.logged);
 
   const extraLinksClass = () => {
     return navbarOpen ? "flex fixed top-0 left-0 bg-white" : "hidden lg:flex";
@@ -51,11 +50,11 @@ export function Navbar() {
     setNavbarOpen(false);
   };
 
-  const handleLogin = () => {
-    dispatchLogin({
-      type: login ? LoginActions.LOGOUT : LoginActions.LOGIN,
-    });
-  };
+  // const handleLogin = () => {
+  //   dispatchLogin({
+  //     type: login ? LoginActions.LOGOUT : LoginActions.LOGIN,
+  //   });
+  // };
 
   return (
     <>
@@ -99,13 +98,13 @@ export function Navbar() {
               );
             })}
 
-            {login ? (
-              <button className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8">
+            {logged ? (
+              <button className="font-bold border-b-2 border-sea-blue hover:border-opacity-50">
                 Logout
               </button>
             ) : (
               <Link href="/auth/login">
-                <a className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8">
+                <a className="border-b-2 border-sea-blue hover:border-opacity-50">
                   Login
                 </a>
               </Link>

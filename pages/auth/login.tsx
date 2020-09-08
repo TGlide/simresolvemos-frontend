@@ -1,4 +1,5 @@
 import { useForm, FieldError } from "react-hook-form";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import Link from "next/link";
 
@@ -13,6 +14,8 @@ export default function Login() {
   >({
     mode: "all",
   });
+  const router = useRouter();
+  const { fromTask } = router.query;
 
   const onSubmit = (data) => {
     console.log(data);
@@ -35,11 +38,21 @@ export default function Login() {
         <h1 className="font-header font-bold text-4xl ml-4">Login</h1>
       </header>
 
+      {fromTask && (
+        <p className="max-w-3xl mx-auto text-center text-sm opacity-75 mt-2">
+          Faça seu login, ou se{" "}
+          <Link href="/auth/register?fromTask=true">
+            <a className="text-sea-blue underline hover:opacity-75">cadastre</a>
+          </Link>{" "}
+          para enviar a tarefa!
+        </p>
+      )}
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
       >
-        <label className="block mt-4">
+        <label className="block">
           <span>E-mail</span>
           <input
             type="text"
@@ -70,7 +83,7 @@ export default function Login() {
         </button>
       </form>
 
-      <Link href="/auth/register">
+      <Link href={`/auth/register${fromTask ? "?fromTask=true" : ""}`}>
         <a className="block text-center mt-8 text-sea-blue underline hover:opacity-75">
           Não possui cadastro?
         </a>

@@ -1,14 +1,14 @@
-import "../styles/index.css";
-import "slick-carousel/slick/slick.css";
+import { StoreProvider } from "easy-peasy";
 import "slick-carousel/slick/slick-theme.css";
-
-import { Navbar } from "../components/Navbar";
+import "slick-carousel/slick/slick.css";
 import { Footer } from "../components/Footer";
-import { LoginProvider } from "../components/context/Login";
+import { Navbar } from "../components/Navbar";
+import store from "../store";
+import "../styles/index.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <LoginProvider>
+    <StoreProvider store={store}>
       <div className="min-h-screen flex flex-col">
         <div className="relative lg:container lg:px-12 flex-grow">
           <Navbar />
@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
         </div>
         <Footer />
       </div>
-    </LoginProvider>
+    </StoreProvider>
   );
 }
 

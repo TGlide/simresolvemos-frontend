@@ -96,7 +96,8 @@ export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
           mask="99/99/9999 99:99"
           type="text"
           name="dueDate"
-          ref={register({ required: true })}
+          rules={{ required: true }}
+          defaultValue=""
           className="form-input mt-2 block w-full"
         />
         {renderFieldError(

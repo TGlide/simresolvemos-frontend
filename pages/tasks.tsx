@@ -1,13 +1,17 @@
-import { useForm, FieldError } from "react-hook-form";
-import { useState, ReactNode } from "react";
+import { useState } from "react";
 import StepOne from "../components/tasks/forms/StepOne";
 import StepTwo from "../components/tasks/forms/StepTwo";
+import { useStoreState, useStoreActions, Task } from "../store";
+import { useRouter } from "next/router";
 
 export default function Tasks() {
   const stepTotal = 2;
 
   const [stepsData, setStepsData] = useState<{ [key: string]: any }[]>([]);
   const [stepNumber, setStepNumber] = useState(0);
+  const logged = useStoreState((state) => state.user.logged);
+  const setTasks = useStoreActions((actions) => actions.task.setData);
+  const router = useRouter();
 
   // Handlers
   const handleGoToStep = (step: number) => {
@@ -15,14 +19,26 @@ export default function Tasks() {
   };
 
   const handleSubmitStep = (data: { [key: string]: any }) => {
-    console.log(`Step ${stepNumber + 1} data:`, data);
     const newStepsData: { [key: string]: any }[] = [...stepsData];
     newStepsData[stepNumber] = { ...data };
 
     setStepsData(newStepsData);
 
     const newStepNumber = stepNumber + 1;
-    setStepNumber(newStepNumber);
+    if (newStepNumber === stepTotal) {
+      let taskData: Task = {};
+      for (let step of newStepsData) {
+        taskData = { ...taskData, ...step };
+      }
+
+      setTasks(taskData);
+
+      if (!logged) {
+        router.push("/auth/login?fromTask=true");
+      }
+    } else {
+      setStepNumber(newStepNumber);
+    }
   };
 
   // Renderers
