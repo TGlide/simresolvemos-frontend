@@ -20,10 +20,9 @@ interface TaskModel {
 interface UserModel {
   logged: boolean;
   data?: {
-    name: string;
     email: string;
   };
-  login: Action<UserModel, { data: { name: string; email: string } }>;
+  login: Action<UserModel, { data: UserModel["data"] }>;
   logout: Action<UserModel>;
 }
 

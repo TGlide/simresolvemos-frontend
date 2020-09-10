@@ -36,4 +36,13 @@ body {
   @apply opacity-100;
 }
 
+.form-input[disabled],
+.form-select[disabled],
+.form-radio[disabled],
+.form-checkbox[disabled] {
+  cursor: not-allowed !important;
+  opacity: 0.9;
+  @apply bg-gray-100;
+}
+
 @tailwind utilities;

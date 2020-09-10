@@ -1,8 +1,10 @@
 import { useForm, FieldError, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Link from "next/link";
 import { useStoreActions } from "../../store";
+import { LoginUser } from "../../api/auth";
+import Spinner from "../../components/shared/Spinner";
 
 type FormValues = {
   email?: string;
@@ -18,12 +20,33 @@ export default function Login() {
   const router = useRouter();
   const { fromTask } = router.query;
   const login = useStoreActions((state) => state.user.login);
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<undefined | string>(undefined);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    login({ data: { name: "John Doe", email: data.email } });
-    if (fromTask) {
-      alert("Task sent!");
-    }
+    setLoginError(undefined);
+    setLoginLoading(true);
+    LoginUser({ email: data.email, password: data.password })
+      .then((res) => {
+        if (res.data.success) {
+          login({ data: { email: data.email } });
+          if (fromTask) {
+            alert("Task sent!");
+          }
+        } else {
+          setLoginError(
+            "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
+          );
+        }
+      })
+      .catch(() => {
+        setLoginError(
+          "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
+        );
+      })
+      .finally(() => {
+        setLoginLoading(false);
+      });
   };
 
   const renderFieldError = (
@@ -60,6 +83,7 @@ export default function Login() {
         <label className="block">
           <span>E-mail</span>
           <input
+            disabled={loginLoading}
             type="text"
             name="email"
             ref={register({ required: true })}
@@ -72,6 +96,7 @@ export default function Login() {
         <label className="block mt-4">
           <span>Senha</span>
           <input
+            disabled={loginLoading}
             type="password"
             name="password"
             ref={register({ required: true })}
@@ -81,11 +106,17 @@ export default function Login() {
         </label>
 
         <button
+          disabled={loginLoading}
           className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2  hover:opacity-75"
           type="submit"
         >
-          Entrar
+          {loginLoading ? <Spinner size={8} /> : "Entrar"}
         </button>
+        {loginError && (
+          <span className="block mx-auto mt-4 text-red-400 text-sm text-center">
+            {loginError}
+          </span>
+        )}
       </form>
 
       <Link href={`/auth/register${fromTask ? "?fromTask=true" : ""}`}>

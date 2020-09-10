@@ -11,15 +11,28 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useStoreActions } from "../../store";
 
+import { RegisterUser, RegisterBody } from "../../api/auth";
+import { spawn } from "child_process";
+import Spinner from "../../components/shared/Spinner";
+
 type FormValues = {
   name?: string;
+  birthday?: string;
   phone?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
+  hasWhatsapp?: boolean;
 };
 
 export default function Register() {
+  const [showPage, setShowPage] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
+
+  const [registerError, setRegisterError] = useState<undefined | string>(
+    undefined
+  );
+
   const { register, handleSubmit, errors, watch, setValue, control } = useForm<
     FormValues
   >({
@@ -28,7 +41,6 @@ export default function Register() {
   const watchPassword = watch("password");
   const router = useRouter();
   const { fromTask } = router.query;
-  const [showPage, setShowPage] = useState(false);
   const login = useStoreActions((state) => state.user.login);
 
   useEffect(() => {
@@ -36,10 +48,39 @@ export default function Register() {
   }, []);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    login({ data: { name: data.name, email: data.email } });
-    if (fromTask) {
-      alert("Task sent!");
-    }
+    setRegisterError(undefined);
+    setRegisterLoading(true);
+
+    const registerBody: RegisterBody = {
+      nome: data.name,
+      sobrenome: "",
+      nascimento: data.birthday,
+      email: data.email,
+      senha: data.password,
+      telefone: data.phone,
+      is_whatsapp: data.hasWhatsapp,
+    };
+
+    RegisterUser(registerBody)
+      .then((res) => {
+        if (res.data.sucess) {
+          login({ data: { email: data.email } });
+          if (fromTask) {
+            alert("Task sent!");
+          }
+        } else {
+          setRegisterError(
+            res.data.error?.[0] ||
+              "Oops! Não conseguimos te cadastrar. Por favor, tente novamente, ou contate nosso suporte!"
+          );
+        }
+      })
+      .catch(() => {
+        setRegisterError(
+          "Oops! Não conseguimos te cadastrar. Por favor, tente novamente, ou contate nosso suporte!"
+        );
+      })
+      .finally(() => setRegisterLoading(false));
   };
 
   const renderFieldError = (
@@ -85,7 +126,7 @@ export default function Register() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
+        className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6 mb-8"
       >
         <label className="block">
           <span>Nome</span>
@@ -96,7 +137,25 @@ export default function Register() {
             className="form-input mt-2 block w-full"
             placeholder="John Doe"
           />
-          {renderFieldError(errors.name, "Por favor digite seu e-nome")}
+          {renderFieldError(errors.name, "Por favor digite seu nome")}
+        </label>
+
+        <label className="block mt-4">
+          <span>Data de aniversário</span>
+          <Controller
+            as={<InputMask />}
+            control={control}
+            mask="99/99/9999"
+            type="text"
+            name="birthday"
+            rules={{ required: true }}
+            defaultValue=""
+            className="form-input mt-2 block w-full"
+          />
+          {renderFieldError(
+            errors.birthday,
+            "Por favor digite seu aniversario"
+          )}
         </label>
 
         <label className="block mt-4">
@@ -116,6 +175,16 @@ export default function Register() {
             errors.phone,
             "Por favor digite um telefone para contato"
           )}
+        </label>
+
+        <label className="inline-flex items-center mt-4 cursor-pointer">
+          <input
+            type="checkbox"
+            className="form-checkbox text-land-green cursor-pointer"
+            ref={register}
+            name="hasWhatsapp"
+          />
+          <span className="ml-2">Possui Whatsapp?</span>
         </label>
 
         <label className="block mt-4">
@@ -159,11 +228,18 @@ export default function Register() {
         </label>
 
         <button
+          disabled={registerLoading}
           className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2  hover:opacity-75"
           type="submit"
         >
-          Cadastrar
+          {registerLoading ? <Spinner size={8} /> : "Cadastrar"}
         </button>
+
+        {registerError && (
+          <span className="block mx-auto mt-4 text-red-400 text-sm text-center">
+            {registerError}
+          </span>
+        )}
       </form>
     </div>
   );
