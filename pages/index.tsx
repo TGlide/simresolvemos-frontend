@@ -1,7 +1,15 @@
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+  const { authMessage } = router.query;
+
+  if (authMessage) toast.success(authMessage);
+
   return (
     <>
       <div className={`${styles.wave} hidden lg:block`}>

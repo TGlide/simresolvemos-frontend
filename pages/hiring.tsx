@@ -71,7 +71,7 @@ export default function Hiring() {
         </label>
 
         <label className="block mt-4">
-          <span>E-mail</span>
+          <span>Email</span>
           <input
             type="text"
             name="email"
@@ -79,7 +79,7 @@ export default function Hiring() {
             className="form-input mt-2 block w-full"
             placeholder="john.doe@mail.com"
           />
-          {renderFieldError(errors.email, "Por favor digite seu e-mail")}
+          {renderFieldError(errors.email, "Por favor digite seu email")}
         </label>
 
         <label className="block mt-4">

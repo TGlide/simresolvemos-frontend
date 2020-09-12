@@ -11,7 +11,7 @@ export type RegisterBody = {
 };
 
 type RegisterResponse = {
-  sucess: boolean;
+  success: boolean;
   error: string[];
 };
 
@@ -29,6 +29,29 @@ export function RegisterUser(
   );
 }
 
+export type VerifyBody = {
+  user_mail: string;
+  token: number;
+};
+
+export type VerifyResponse = {
+  success: boolean;
+  errors: string[];
+};
+
+export function VerifyUser(
+  body: VerifyBody
+): Promise<AxiosResponse<VerifyResponse>> {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  return axios.post(
+    "https://resolvemos-api.herokuapp.com/api/django/token",
+    body,
+    { headers }
+  );
+}
 export type LoginBody = {
   email: string;
   password: string;

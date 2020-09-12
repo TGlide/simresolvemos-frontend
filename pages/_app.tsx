@@ -1,6 +1,9 @@
 import { StoreProvider } from "easy-peasy";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import store from "../store";
@@ -18,6 +21,7 @@ function MyApp({ Component, pageProps }) {
         </div>
         <Footer />
       </div>
+      <ToastContainer />
     </StoreProvider>
   );
 }

@@ -6,12 +6,12 @@ import {
   Controller,
   SubmitHandler,
 } from "react-hook-form";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useStoreActions } from "../../store";
 
-import { RegisterUser, RegisterBody } from "../../api/auth";
+import { RegisterUser, RegisterBody, VerifyUser } from "../../api/auth";
 import { spawn } from "child_process";
 import Spinner from "../../components/shared/Spinner";
 
@@ -28,12 +28,19 @@ type FormValues = {
 export default function Register() {
   const [showPage, setShowPage] = useState(false);
   const [registerLoading, setRegisterLoading] = useState<boolean>(false);
-
   const [registerError, setRegisterError] = useState<undefined | string>(
     undefined
   );
+  const [awaitingVerification, setAwaitingVerification] = useState<boolean>(
+    false
+  );
+  const [verificationLoading, setVerficationLoading] = useState<boolean>(false);
+  const [verificationError, setVerficationError] = useState<undefined | string>(
+    undefined
+  );
+  const [token, setToken] = useState<string>("");
 
-  const { register, handleSubmit, errors, watch, setValue, control } = useForm<
+  const { register, handleSubmit, errors, watch, control, getValues } = useForm<
     FormValues
   >({
     mode: "all",
@@ -43,9 +50,9 @@ export default function Register() {
   const { fromTask } = router.query;
   const login = useStoreActions((state) => state.user.login);
 
-  useEffect(() => {
-    setShowPage(true);
-  }, []);
+  const changeToken = (event: ChangeEvent<HTMLInputElement>) => {
+    setToken(event.target.value);
+  };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     setRegisterError(undefined);
@@ -63,11 +70,8 @@ export default function Register() {
 
     RegisterUser(registerBody)
       .then((res) => {
-        if (res.data.sucess) {
-          login({ data: { email: data.email } });
-          if (fromTask) {
-            alert("Task sent!");
-          }
+        if (res.data.success) {
+          setAwaitingVerification(true);
         } else {
           setRegisterError(
             res.data.error?.[0] ||
@@ -81,6 +85,28 @@ export default function Register() {
         );
       })
       .finally(() => setRegisterLoading(false));
+  };
+
+  const handleVerify = () => {
+    setVerficationLoading(true);
+    setVerficationError(undefined);
+
+    const { email } = getValues();
+    VerifyUser({ user_mail: email, token: parseInt(token) })
+      .then((res) => {
+        if (res.data.success) {
+          login({ data: { email } });
+          router.push("/?authMessage=Cadastro concluído com sucesso!");
+        } else {
+          setVerficationError("A verificação falhou! Tente novamente.");
+        }
+      })
+      .catch(() => {
+        setVerficationError("A verificação falhou! Tente novamente.");
+      })
+      .finally(() => {
+        setVerficationLoading(false);
+      });
   };
 
   const renderFieldError = (
@@ -105,6 +131,10 @@ export default function Register() {
   const validateConfirmedPassword = (value): boolean => {
     return value === watchPassword;
   };
+
+  useEffect(() => {
+    setShowPage(true);
+  }, []);
 
   if (!showPage) return null;
 
@@ -188,7 +218,7 @@ export default function Register() {
         </label>
 
         <label className="block mt-4">
-          <span>E-mail</span>
+          <span>Email</span>
           <input
             type="email"
             name="email"
@@ -196,7 +226,7 @@ export default function Register() {
             className="form-input mt-2 block w-full"
             placeholder="john.doe@mail.com"
           />
-          {renderFieldError(errors.email, "Por favor digite seu e-mail")}
+          {renderFieldError(errors.email, "Por favor digite seu email")}
         </label>
 
         <label className="block mt-4">
@@ -241,6 +271,45 @@ export default function Register() {
           </span>
         )}
       </form>
+
+      {awaitingVerification && (
+        <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-10">
+          <div className="rounded bg-white p-8 max-w-sm">
+            <h1 className="font-header text-lg text-center">
+              Verifique seu email
+            </h1>
+            <p className="text-center break-normal text-xs mt-2">
+              Nós enviamos um código de confirmação para seu email. Verifique
+              sua caixa de entrada e digite o código abaixo.
+            </p>
+            <label className="block mt-8 text-center">
+              <span>Código</span>
+              <input
+                type="text"
+                maxLength={5}
+                className="form-input mt-2 block w-24 mx-auto text-center"
+                value={token}
+                onChange={changeToken}
+              />
+            </label>
+
+            <button
+              className="block bg-land-green text-white font-header mx-auto mt-8 rounded px-4 py-2 hover:opacity-75"
+              type="submit"
+              disabled={verificationLoading}
+              onClick={handleVerify}
+            >
+              {verificationLoading ? <Spinner size={6} /> : "Verificar"}
+            </button>
+
+            {verificationError && (
+              <span className="block mx-auto mt-4 text-red-400 text-sm text-center">
+                {verificationError}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

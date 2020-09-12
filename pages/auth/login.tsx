@@ -33,6 +33,7 @@ export default function Login() {
           if (fromTask) {
             alert("Task sent!");
           }
+          router.push("/?authMessage=Login feito com sucesso!");
         } else {
           setLoginError(
             "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
@@ -81,7 +82,7 @@ export default function Login() {
         className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
       >
         <label className="block">
-          <span>E-mail</span>
+          <span>Email</span>
           <input
             disabled={loginLoading}
             type="text"
@@ -90,7 +91,7 @@ export default function Login() {
             className="form-input mt-2 block w-full"
             placeholder="john.doe@mail.com"
           />
-          {renderFieldError(errors.email, "Por favor digite seu e-mail")}
+          {renderFieldError(errors.email, "Por favor digite seu email")}
         </label>
 
         <label className="block mt-4">
