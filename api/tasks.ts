@@ -8,7 +8,7 @@ export type SendTaskData = {
   level: string;
   title: string;
   description: string;
-  FILES: FileList;
+  files: FileList;
   "delivery-value": string;
   "want-video": boolean;
   video_questions: string;
@@ -24,8 +24,12 @@ export const SendTask = (
   const formData = new FormData();
 
   Object.keys(data).forEach((key) => {
-    formData.append(key, data[key]);
+    if (key !== "files") formData.append(key, data[key]);
   });
+
+  for (let i = 0; i < data.files.length; i++) {
+    formData.append("files", data.files[i]);
+  }
 
   const headers = {
     "Content-Type": "multipart/form-data",

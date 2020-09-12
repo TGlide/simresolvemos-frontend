@@ -2,7 +2,7 @@ import { useForm, FieldError } from "react-hook-form";
 import { ReactNode, FormEvent } from "react";
 import StepLayout, { renderFieldError } from "./StepLayout";
 
-type FormValues = {
+export type StepOneFormValues = {
   taskType?: string;
   area?: string;
   subject?: string;
@@ -10,12 +10,12 @@ type FormValues = {
 };
 
 type StepProps = {
-  defaultValues?: FormValues;
+  defaultValues?: StepOneFormValues;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
 export default function StepOne({ onSubmit, defaultValues }: StepProps) {
-  const { register, handleSubmit, errors } = useForm<FormValues>({
+  const { register, handleSubmit, errors } = useForm<StepOneFormValues>({
     defaultValues,
     mode: "all",
   });

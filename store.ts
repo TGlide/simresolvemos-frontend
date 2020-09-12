@@ -1,16 +1,8 @@
 import { createStore, createTypedHooks, Action, action } from "easy-peasy";
+import { StepOneFormValues } from "./components/tasks/forms/StepOne";
+import { StepTwoFormValues } from "./components/tasks/forms/StepTwo";
 
-export type Task = {
-  taskType?: string;
-  area?: string;
-  subject?: string;
-  level?: string;
-  title?: string;
-  description?: string;
-  dueDate?: string;
-  files?: FileList;
-  wantVideo?: boolean;
-};
+export type Task = StepOneFormValues & StepTwoFormValues;
 
 interface TaskModel {
   data: Task;

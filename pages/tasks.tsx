@@ -1,15 +1,18 @@
 import { useState } from "react";
-import StepOne from "../components/tasks/forms/StepOne";
-import StepTwo from "../components/tasks/forms/StepTwo";
+import StepOne, { StepOneFormValues } from "../components/tasks/forms/StepOne";
+import StepTwo, { StepTwoFormValues } from "../components/tasks/forms/StepTwo";
 import { useStoreState, useStoreActions, Task } from "../store";
 import { useRouter } from "next/router";
+import { SendTaskData, SendTask } from "../api/tasks";
+import { toast } from "react-toastify";
 
 export default function Tasks() {
   const stepTotal = 2;
 
   const [stepsData, setStepsData] = useState<{ [key: string]: any }[]>([]);
   const [stepNumber, setStepNumber] = useState(0);
-  const logged = useStoreState((state) => state.user.logged);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const user = useStoreState((state) => state.user);
   const setTasks = useStoreActions((actions) => actions.task.setData);
   const router = useRouter();
 
@@ -25,16 +28,51 @@ export default function Tasks() {
     setStepsData(newStepsData);
 
     const newStepNumber = stepNumber + 1;
+
     if (newStepNumber === stepTotal) {
+      setButtonLoading(true);
+
       let taskData: Task = {};
+
       for (let step of newStepsData) {
         taskData = { ...taskData, ...step };
       }
 
       setTasks(taskData);
 
-      if (!logged) {
+      if (!user.logged) {
         router.push("/auth/login?fromTask=true");
+      } else {
+        const { email } = user.data;
+
+        const sendTaskData: SendTaskData = {
+          "delivery-value": taskData.dueDate,
+          "want-video": taskData.wantVideo,
+          files: taskData.files,
+          area: taskData.area,
+          description: taskData.description,
+          level: taskData.level,
+          subject: taskData.subject,
+          tarefa: taskData.subject,
+          title: taskData.title,
+          user_email: email,
+          video_questions: taskData.videoQuestions,
+        };
+
+        SendTask(sendTaskData)
+          .then((res) => {
+            if (res.data.success) {
+              toast.success("Tarefa enviada com sucesso!");
+              router.push("/");
+            } else {
+              toast.error(
+                "Erro ao enviar a tarefa! Por favor, tente novamente."
+              );
+            }
+          })
+          .finally(() => {
+            setButtonLoading(false);
+          });
       }
     } else {
       setStepNumber(newStepNumber);
@@ -92,6 +130,7 @@ export default function Tasks() {
       )}
       {stepNumber === 1 && (
         <StepTwo
+          buttonLoading={buttonLoading}
           onSubmit={handleSubmitStep}
           defaultValues={stepsData[1] || undefined}
         />

@@ -1,9 +1,11 @@
 import { useForm, FieldError } from "react-hook-form";
 import { ReactNode, FormEvent } from "react";
+import Spinner from "../../shared/Spinner";
 
 export type StepLayoutProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
+  buttonLoading?: boolean;
 };
 
 export const renderFieldError = (
@@ -15,7 +17,11 @@ export const renderFieldError = (
   return null;
 };
 
-export default function StepLayout({ onSubmit, children }: StepLayoutProps) {
+export default function StepLayout({
+  onSubmit,
+  children,
+  buttonLoading,
+}: StepLayoutProps) {
   return (
     <form
       onSubmit={onSubmit}
@@ -25,8 +31,13 @@ export default function StepLayout({ onSubmit, children }: StepLayoutProps) {
       <button
         className="block bg-land-green mx-auto mt-8 rounded-full p-2  hover:opacity-75"
         type="submit"
+        disabled={buttonLoading}
       >
-        <img src="/vectors/arrow-right.svg" alt="Próximo" />
+        {buttonLoading === true ? (
+          <Spinner size={6} />
+        ) : (
+          <img src="/vectors/arrow-right.svg" alt="Próximo" />
+        )}
       </button>
     </form>
   );

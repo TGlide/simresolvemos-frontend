@@ -2,9 +2,11 @@ import { useForm, FieldError, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
 import Link from "next/link";
-import { useStoreActions } from "../../store";
+import { useStoreActions, useStoreState } from "../../store";
 import { LoginUser } from "../../api/auth";
 import Spinner from "../../components/shared/Spinner";
+import { SendTaskData, SendTask } from "../../api/tasks";
+import { toast } from "react-toastify";
 
 type FormValues = {
   email?: string;
@@ -20,6 +22,7 @@ export default function Login() {
   const router = useRouter();
   const { fromTask } = router.query;
   const login = useStoreActions((state) => state.user.login);
+  const task = useStoreState((state) => state.task.data);
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<undefined | string>(undefined);
 
@@ -30,22 +33,48 @@ export default function Login() {
       .then((res) => {
         if (res.data.success) {
           login({ data: { email: data.email } });
+
           if (fromTask) {
-            alert("Task sent!");
+            const sendTaskData: SendTaskData = {
+              "delivery-value": task.dueDate,
+              "want-video": task.wantVideo,
+              files: task.files,
+              area: task.area,
+              description: task.description,
+              level: task.level,
+              subject: task.subject,
+              tarefa: task.subject,
+              title: task.title,
+              user_email: data.email,
+              video_questions: task.videoQuestions,
+            };
+
+            SendTask(sendTaskData)
+              .then((res) => {
+                if (res.data.success) {
+                  toast.success("Tarefa enviada com sucesso!");
+                  router.push("/?authMessage=Login feito com sucesso!");
+                } else {
+                  toast.error(
+                    "Erro ao enviar a tarefa! Por favor, tente novamente."
+                  );
+                }
+              })
+              .finally(() => setLoginLoading(false));
+          } else {
+            router.push("/?authMessage=Login feito com sucesso!");
           }
-          router.push("/?authMessage=Login feito com sucesso!");
         } else {
           setLoginError(
             "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
           );
+          setLoginLoading(false);
         }
       })
       .catch(() => {
         setLoginError(
           "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
         );
-      })
-      .finally(() => {
         setLoginLoading(false);
       });
   };

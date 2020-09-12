@@ -4,27 +4,34 @@ import StepLayout, { renderFieldError } from "./StepLayout";
 import Tooltip from "../../shared/Tooltip";
 import InputMask from "react-input-mask";
 
-type FormValues = {
+export type StepTwoFormValues = {
   title?: string;
   description?: string;
   dueDate?: string;
   files?: FileList;
   wantVideo?: boolean;
+  videoQuestions?: string;
 };
 
 type StepProps = {
-  defaultValues?: FormValues;
+  defaultValues?: StepTwoFormValues;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  buttonLoading: boolean;
 };
 
-export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
+export default function StepTwo({
+  onSubmit,
+  defaultValues,
+  buttonLoading,
+}: StepProps) {
   const { register, handleSubmit, errors, watch, setValue, control } = useForm<
-    FormValues
+    StepTwoFormValues
   >({
     defaultValues,
     mode: "all",
   });
   const watchFiles = watch("files");
+  const watchWantVideo = watch("wantVideo");
   const [filesError, setFilesError] = useState<boolean>(false);
 
   // Handlers
@@ -37,7 +44,7 @@ export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
   };
 
   return (
-    <StepLayout onSubmit={handleSubmit(onSubmit)}>
+    <StepLayout onSubmit={handleSubmit(onSubmit)} buttonLoading={buttonLoading}>
       <label className="block ">
         <span>Título da tarefa</span>
         <input
@@ -111,7 +118,7 @@ export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
           type="checkbox"
           className="form-checkbox text-land-green"
           ref={register}
-          name="want_video"
+          name="wantVideo"
         />
         <span className="ml-2">Quero um vídeo explicativo</span>
         <Tooltip text="Vídeos explicativos feitos por nossos monitores para ajudar você a entender a questão que você está em dúvida. São vídeos claros e objetivos de 5 - 12 minutos.">
@@ -121,12 +128,28 @@ export default function StepTwo({ onSubmit, defaultValues }: StepProps) {
         </Tooltip>
       </label>
 
+      {watchWantVideo && (
+        <label className="block mt-4">
+          <span>Questões do vídeo</span>
+          <input
+            type="text"
+            name="videoQuestions"
+            ref={register({ required: true })}
+            className="form-input mt-2 block w-full"
+          />
+          {renderFieldError(
+            errors.videoQuestions,
+            "Por favor especifique as questões que quer no vídeo"
+          )}
+        </label>
+      )}
+
       <label className="inline-flex items-start mt-4 cursor-pointer">
         <input
           type="checkbox"
           className="form-checkbox text-land-green mt-1"
           ref={register({ required: true })}
-          name="agree_terms"
+          name="agreeTerms"
         />
         <span className="text-sm opacity-75 ml-2">
           Estou ciente que a tarefa será realizada usando de base as informações

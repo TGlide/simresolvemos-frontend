@@ -45,11 +45,19 @@ body {
   @apply bg-gray-100;
 }
 
+.Toastify__toast {
+  @apply font-body;
+  @apply font-semibold;
+}
+
 .Toastify__toast--success {
   @apply bg-land-green;
   @apply text-white;
-  @apply font-body;
-  @apply font-semibold;
+}
+
+.Toastify__toast--error {
+  @apply bg-red-500;
+  @apply text-white;
 }
 
 button:disabled {
