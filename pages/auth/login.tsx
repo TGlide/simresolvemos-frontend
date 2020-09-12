@@ -7,6 +7,7 @@ import { LoginUser } from "../../api/auth";
 import Spinner from "../../components/shared/Spinner";
 import { SendTaskData, SendTask } from "../../api/tasks";
 import { toast } from "react-toastify";
+import { formatTaskDataForApi } from "../../utils/tasks";
 
 type FormValues = {
   email?: string;
@@ -29,38 +30,32 @@ export default function Login() {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     setLoginError(undefined);
     setLoginLoading(true);
+
     LoginUser({ email: data.email, password: data.password })
       .then((res) => {
         if (res.data.success) {
           login({ data: { email: data.email } });
 
           if (fromTask) {
-            const sendTaskData: SendTaskData = {
-              "delivery-value": task.dueDate,
-              "want-video": task.wantVideo,
-              files: task.files,
-              area: task.area,
-              description: task.description,
-              level: task.level,
-              subject: task.subject,
-              tarefa: task.subject,
-              title: task.title,
-              user_email: data.email,
-              video_questions: task.videoQuestions,
-            };
+            const sendTaskData = formatTaskDataForApi(task, data.email);
 
             SendTask(sendTaskData)
               .then((res) => {
-                if (res.data.success) {
+                if (res.data.success)
                   toast.success("Tarefa enviada com sucesso!");
-                  router.push("/?authMessage=Login feito com sucesso!");
-                } else {
+                else
                   toast.error(
                     "Erro ao enviar a tarefa! Por favor, tente novamente."
                   );
-                }
               })
-              .finally(() => setLoginLoading(false));
+              .catch(() => {
+                toast.error(
+                  "Erro ao enviar a tarefa! Por favor, tente novamente."
+                );
+              })
+              .finally(() => {
+                router.push("/?authMessage=Login feito com sucesso!");
+              });
           } else {
             router.push("/?authMessage=Login feito com sucesso!");
           }

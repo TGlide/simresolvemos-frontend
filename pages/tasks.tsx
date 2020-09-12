@@ -5,6 +5,7 @@ import { useStoreState, useStoreActions, Task } from "../store";
 import { useRouter } from "next/router";
 import { SendTaskData, SendTask } from "../api/tasks";
 import { toast } from "react-toastify";
+import { formatTaskDataForApi } from "../utils/tasks";
 
 export default function Tasks() {
   const stepTotal = 2;
@@ -45,19 +46,7 @@ export default function Tasks() {
       } else {
         const { email } = user.data;
 
-        const sendTaskData: SendTaskData = {
-          "delivery-value": taskData.dueDate,
-          "want-video": taskData.wantVideo,
-          files: taskData.files,
-          area: taskData.area,
-          description: taskData.description,
-          level: taskData.level,
-          subject: taskData.subject,
-          tarefa: taskData.subject,
-          title: taskData.title,
-          user_email: email,
-          video_questions: taskData.videoQuestions,
-        };
+        const sendTaskData = formatTaskDataForApi(taskData, email);
 
         SendTask(sendTaskData)
           .then((res) => {

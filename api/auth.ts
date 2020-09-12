@@ -30,7 +30,7 @@ export function RegisterUser(
 }
 
 export type VerifyBody = {
-  user_mail: string;
+  user_email: string;
   token: number;
 };
 

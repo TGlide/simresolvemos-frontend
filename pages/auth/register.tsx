@@ -9,11 +9,14 @@ import {
 import { ReactNode, useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useStoreActions } from "../../store";
+import { useStoreActions, useStoreState } from "../../store";
 
 import { RegisterUser, RegisterBody, VerifyUser } from "../../api/auth";
 import { spawn } from "child_process";
 import Spinner from "../../components/shared/Spinner";
+import { formatTaskDataForApi } from "../../utils/tasks";
+import { SendTask } from "../../api/tasks";
+import { toast } from "react-toastify";
 
 type FormValues = {
   name?: string;
@@ -49,6 +52,7 @@ export default function Register() {
   const router = useRouter();
   const { fromTask } = router.query;
   const login = useStoreActions((state) => state.user.login);
+  const task = useStoreState((state) => state.task.data);
 
   const changeToken = (event: ChangeEvent<HTMLInputElement>) => {
     setToken(event.target.value);
@@ -92,11 +96,34 @@ export default function Register() {
     setVerficationError(undefined);
 
     const { email } = getValues();
-    VerifyUser({ user_mail: email, token: parseInt(token) })
+    VerifyUser({ user_email: email, token: parseInt(token) })
       .then((res) => {
         if (res.data.success) {
           login({ data: { email } });
-          router.push("/?authMessage=Cadastro concluído com sucesso!");
+
+          if (fromTask) {
+            const sendTaskData = formatTaskDataForApi(task, email);
+
+            SendTask(sendTaskData)
+              .then((res) => {
+                if (res.data.success)
+                  toast.success("Tarefa enviada com sucesso!");
+                else
+                  toast.error(
+                    "Erro ao enviar a tarefa! Por favor, tente novamente."
+                  );
+              })
+              .catch(() => {
+                toast.error(
+                  "Erro ao enviar a tarefa! Por favor, tente novamente."
+                );
+              })
+              .finally(() => {
+                router.push("/?authMessage=Cadastro concluído com sucesso!");
+              });
+          } else {
+            router.push("/?authMessage=Cadastro concluído com sucesso!");
+          }
         } else {
           setVerficationError("A verificação falhou! Tente novamente.");
         }
