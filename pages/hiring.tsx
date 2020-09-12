@@ -15,7 +15,7 @@ type FormValues = {
   name?: string;
   email?: string;
   phone?: string;
-  resume?: File;
+  resume?: FileList;
 };
 
 export default function Hiring() {
@@ -38,7 +38,7 @@ export default function Hiring() {
 
     SendResume({
       email: data.email,
-      files: data.resume,
+      resume: data.resume,
       nome: data.name,
       telefone: data.phone,
     })
