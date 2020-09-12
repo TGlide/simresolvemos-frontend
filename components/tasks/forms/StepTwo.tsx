@@ -3,6 +3,7 @@ import { ReactNode, FormEvent, ChangeEvent, useState } from "react";
 import StepLayout, { renderFieldError } from "./StepLayout";
 import Tooltip from "../../shared/Tooltip";
 import InputMask from "react-input-mask";
+import { isValidDatetime } from "../../../utils/date";
 
 export type StepTwoFormValues = {
   title?: string;
@@ -103,13 +104,13 @@ export default function StepTwo({
           mask="99/99/9999 99:99"
           type="text"
           name="dueDate"
-          rules={{ required: true }}
+          rules={{ required: true, validate: isValidDatetime }}
           defaultValue=""
           className="form-input mt-2 block w-full"
         />
         {renderFieldError(
           errors.dueDate,
-          "Por favor especifique o prazo de entrega"
+          "Por favor especifique um prazo de entrega válido"
         )}
       </label>
 

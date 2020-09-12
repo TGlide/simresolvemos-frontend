@@ -1,15 +1,16 @@
-import {
-  useForm,
-  FieldError,
-  Controller,
-  SubmitHandler,
-} from "react-hook-form";
-import { useState, ReactNode, useEffect } from "react";
-import InputMask from "react-input-mask";
-import { SendResume } from "../api/hiring";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { ReactNode, useEffect, useState } from "react";
+import {
+  Controller,
+  FieldError,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import InputMask from "react-input-mask";
+import { toast } from "react-toastify";
+import { SendResume } from "../api/hiring";
 import Spinner from "../components/shared/Spinner";
+import { isValidNumber } from "../utils/number";
 
 type FormValues = {
   name?: string;
@@ -118,7 +119,7 @@ export default function Hiring() {
             type="text"
             name="phone"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: true, validate: isValidNumber }}
             className="form-input mt-2 block w-full"
             placeholder="(21) 99999-9999"
             mask="(99) 99999-9999"

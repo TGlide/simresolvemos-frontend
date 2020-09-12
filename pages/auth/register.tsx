@@ -14,6 +14,8 @@ import { SendTask } from "../../api/tasks";
 import Spinner from "../../components/shared/Spinner";
 import { useStoreActions, useStoreState } from "../../store";
 import { formatTaskDataForApi } from "../../utils/tasks";
+import { isDate } from "util";
+import { isValidNumber } from "../../utils/number";
 
 type FormValues = {
   name?: string;
@@ -206,7 +208,7 @@ export default function Register() {
             mask="99/99/9999"
             type="text"
             name="birthday"
-            rules={{ required: true }}
+            rules={{ required: true, validate: isDate }}
             defaultValue=""
             className="form-input mt-2 block w-full"
           />
@@ -222,7 +224,7 @@ export default function Register() {
             type="text"
             name="phone"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: true, validate: isValidNumber }}
             className="form-input mt-2 block w-full"
             placeholder="(21) 99999-9999"
             mask="(99) 99999-9999"
