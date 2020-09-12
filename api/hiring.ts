@@ -4,7 +4,7 @@ export type SendResumeData = {
   nome: string;
   email: string;
   telefone: string;
-  FILES: FileList;
+  files: File;
 };
 
 export type SendResumeResponse = {

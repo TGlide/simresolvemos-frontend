@@ -8,6 +8,7 @@ import Spinner from "../../components/shared/Spinner";
 import { SendTaskData, SendTask } from "../../api/tasks";
 import { toast } from "react-toastify";
 import { formatTaskDataForApi } from "../../utils/tasks";
+import { totalmem } from "os";
 
 type FormValues = {
   email?: string;
@@ -54,10 +55,12 @@ export default function Login() {
                 );
               })
               .finally(() => {
-                router.push("/?authMessage=Login feito com sucesso!");
+                toast.success("Login feito com sucesso!");
+                router.push("/");
               });
           } else {
-            router.push("/?authMessage=Login feito com sucesso!");
+            toast.success("Login feito com sucesso!");
+            router.push("/");
           }
         } else {
           setLoginError(

@@ -1,12 +1,21 @@
-import { useForm, FieldError, Controller } from "react-hook-form";
+import {
+  useForm,
+  FieldError,
+  Controller,
+  SubmitHandler,
+} from "react-hook-form";
 import { useState, ReactNode, useEffect } from "react";
 import InputMask from "react-input-mask";
+import { SendResume } from "../api/hiring";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import Spinner from "../components/shared/Spinner";
 
 type FormValues = {
   name?: string;
   email?: string;
   phone?: string;
-  resume?: FileList;
+  resume?: File;
 };
 
 export default function Hiring() {
@@ -17,13 +26,34 @@ export default function Hiring() {
   });
   const watchResume = watch("resume");
   const [showPage, setShowPage] = useState(false);
+  const router = useRouter();
+  const [buttonLoading, setButtonloading] = useState(false);
 
   useEffect(() => {
     setShowPage(true);
   }, []);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    setButtonloading(true);
+
+    SendResume({
+      email: data.email,
+      files: data.resume,
+      nome: data.name,
+      telefone: data.phone,
+    })
+      .then((res) => {
+        if (res.data.success) {
+          toast.success("Currículo enviado!");
+          router.push("/");
+        } else {
+          toast.error("Falha ao enviar o currículo! Tente novamente.");
+        }
+      })
+      .catch(() => {
+        toast.error("Falha ao enviar o currículo! Tente novamente.");
+      })
+      .finally(() => setButtonloading(false));
   };
 
   const renderFieldError = (
@@ -73,7 +103,7 @@ export default function Hiring() {
         <label className="block mt-4">
           <span>Email</span>
           <input
-            type="text"
+            type="email"
             name="email"
             ref={register({ required: true })}
             className="form-input mt-2 block w-full"
@@ -92,6 +122,7 @@ export default function Hiring() {
             className="form-input mt-2 block w-full"
             placeholder="(21) 99999-9999"
             mask="(99) 99999-9999"
+            defaultValue=""
             as={<InputMask />}
           />
           {renderFieldError(
@@ -104,18 +135,28 @@ export default function Hiring() {
           <span className="block font-semibold text-sm underline">
             Enviar currículo
           </span>
-          <input ref={register} type="file" name="resume" className="hidden" />
+          <input
+            ref={register({ required: true })}
+            type="file"
+            name="resume"
+            className="hidden"
+          />
           <span className="text-sm flex items-center mt-1 font-bold">
             <img src="/vectors/file.svg" alt="Arquivos" className="w-4 mr-1" />
             {watchResume?.[0]?.name || "Nenhum arquivo selecionado."}
           </span>
+          {renderFieldError(
+            errors.resume as any,
+            "Por favor envie seu currículo"
+          )}
         </label>
 
         <button
           className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2 hover:opacity-75"
           type="submit"
+          disabled={buttonLoading}
         >
-          Enviar
+          {buttonLoading ? <Spinner size={8} /> : "Enviar"}
         </button>
       </form>
     </div>

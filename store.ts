@@ -1,4 +1,10 @@
-import { createStore, createTypedHooks, Action, action } from "easy-peasy";
+import {
+  createStore,
+  createTypedHooks,
+  Action,
+  action,
+  persist,
+} from "easy-peasy";
 import { StepOneFormValues } from "./components/tasks/forms/StepOne";
 import { StepTwoFormValues } from "./components/tasks/forms/StepTwo";
 
@@ -55,5 +61,7 @@ export const useStoreActions = typedHooks.useStoreActions;
 export const useStoreDispatch = typedHooks.useStoreDispatch;
 export const useStoreState = typedHooks.useStoreState;
 
-const store = createStore(storeModel);
+const store = createStore(
+  persist(storeModel, { blacklist: ["task"], storage: "localStorage" })
+);
 export default store;

@@ -1,22 +1,19 @@
-import InputMask from "react-input-mask";
-
-import {
-  useForm,
-  FieldError,
-  Controller,
-  SubmitHandler,
-} from "react-hook-form";
-import { ReactNode, useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useStoreActions, useStoreState } from "../../store";
-
-import { RegisterUser, RegisterBody, VerifyUser } from "../../api/auth";
-import { spawn } from "child_process";
-import Spinner from "../../components/shared/Spinner";
-import { formatTaskDataForApi } from "../../utils/tasks";
-import { SendTask } from "../../api/tasks";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import {
+  Controller,
+  FieldError,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import InputMask from "react-input-mask";
 import { toast } from "react-toastify";
+import { RegisterBody, RegisterUser, VerifyUser } from "../../api/auth";
+import { SendTask } from "../../api/tasks";
+import Spinner from "../../components/shared/Spinner";
+import { useStoreActions, useStoreState } from "../../store";
+import { formatTaskDataForApi } from "../../utils/tasks";
 
 type FormValues = {
   name?: string;
@@ -119,10 +116,14 @@ export default function Register() {
                 );
               })
               .finally(() => {
-                router.push("/?authMessage=Cadastro concluído com sucesso!");
+                toast.success("Cadastro concluído com sucesso!");
+
+                router.push("/");
               });
           } else {
-            router.push("/?authMessage=Cadastro concluído com sucesso!");
+            toast.success("Cadastro concluído com sucesso!");
+
+            router.push("/");
           }
         } else {
           setVerficationError("A verificação falhou! Tente novamente.");
