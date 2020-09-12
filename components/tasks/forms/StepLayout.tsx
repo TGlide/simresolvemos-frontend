@@ -25,7 +25,7 @@ export default function StepLayout({
   return (
     <form
       onSubmit={onSubmit}
-      className="max-w-lg mx-auto mt-4 border-2 border-gray-400 border-solid rounded-lg p-6"
+      className="max-w-lg mx-auto mt-4 mb-8 border-2 border-gray-400 border-solid rounded-lg p-6"
     >
       {children}
       <button

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useStoreState, useStoreActions } from "../store";
+import { toast } from "react-toastify";
 
 const links = [
   {
@@ -53,6 +54,9 @@ export function Navbar() {
 
   const handleLogout = () => {
     dispatchLogout();
+    setNavbarOpen(false);
+    toast.success("Logout feito com sucesso!");
+    router.push("/");
   };
 
   // const handleLogin = () => {
@@ -96,7 +100,10 @@ export function Navbar() {
             {links.map((link, index) => {
               return (
                 <Link href={link.to} key={index}>
-                  <a className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8">
+                  <a
+                    className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8"
+                    onClick={handleNavbarClose}
+                  >
                     {link.name}
                   </a>
                 </Link>
@@ -112,7 +119,10 @@ export function Navbar() {
               </button>
             ) : (
               <Link href="/auth/login">
-                <a className="border-b-2 border-sea-blue hover:border-opacity-50">
+                <a
+                  className="border-b-2 border-sea-blue hover:border-opacity-50"
+                  onClick={handleNavbarClose}
+                >
                   Login
                 </a>
               </Link>

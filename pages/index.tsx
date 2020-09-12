@@ -19,7 +19,7 @@ export default function Home() {
               className="hidden lg:block w-5/12"
             />
             <div className="text-center lg:text-left text-paper-white lg:text-study-black lg:ml-8 mt-32 lg:mt-0">
-              <h1 className="font-header font-semibold md:text-2xl lg:text-4.5xl">
+              <h1 className="font-header font-semibold text-xl md:text-2xl lg:text-4.5xl">
                 Precisa de ajuda acadêmica?
               </h1>
               <p className="text-xl lg:text-2.5xl">

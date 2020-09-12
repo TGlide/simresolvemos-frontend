@@ -73,7 +73,7 @@ export default function Hiring() {
     <div>
       <header className="flex justify-center items-center mt-4">
         <img src="/vectors/people.svg" alt="Pessoas" className="w-18 h-18" />
-        <h1 className="font-header font-bold text-4xl ml-4 mt-2">
+        <h1 className="font-header font-bold text-2xl lg:text-4xl ml-4 mt-2">
           Trabalhe conosco
         </h1>
       </header>
@@ -86,7 +86,7 @@ export default function Hiring() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
+        className="max-w-lg mx-auto mt-8 mb-8 border-2 border-gray-400 border-solid rounded-lg p-6"
       >
         <label className="block">
           <span>Nome</span>
