@@ -17,6 +17,7 @@ export const getStaticProps: GetStaticProps = async () => {
       posts,
       tags,
     },
+    revalidate: 1,
   };
 };
 
