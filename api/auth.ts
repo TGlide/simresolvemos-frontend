@@ -59,6 +59,7 @@ export type LoginBody = {
 
 type LoginResponse = {
   success: boolean;
+  errors: string[];
 };
 
 export function LoginUser(

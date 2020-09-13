@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Controller,
   FieldError,
@@ -9,13 +9,14 @@ import {
 } from "react-hook-form";
 import InputMask from "react-input-mask";
 import { toast } from "react-toastify";
-import { RegisterBody, RegisterUser, VerifyUser } from "../../api/auth";
+import { RegisterBody, RegisterUser } from "../../api/auth";
 import { SendTask } from "../../api/tasks";
+import VerifyModal from "../../components/auth/VerifyModal";
 import Spinner from "../../components/shared/Spinner";
 import { useStoreActions, useStoreState } from "../../store";
-import { formatTaskDataForApi } from "../../utils/tasks";
-import { isDate } from "util";
+import { isValidDate } from "../../utils/date";
 import { isValidNumber } from "../../utils/number";
+import { formatTaskDataForApi } from "../../utils/tasks";
 
 type FormValues = {
   name?: string;
@@ -36,26 +37,18 @@ export default function Register() {
   const [awaitingVerification, setAwaitingVerification] = useState<boolean>(
     false
   );
-  const [verificationLoading, setVerficationLoading] = useState<boolean>(false);
-  const [verificationError, setVerficationError] = useState<undefined | string>(
-    undefined
-  );
-  const [token, setToken] = useState<string>("");
 
   const { register, handleSubmit, errors, watch, control, getValues } = useForm<
     FormValues
   >({
     mode: "all",
   });
+  const watchEmail = watch("email");
   const watchPassword = watch("password");
   const router = useRouter();
   const { fromTask } = router.query;
   const login = useStoreActions((state) => state.user.login);
   const task = useStoreState((state) => state.task.data);
-
-  const changeToken = (event: ChangeEvent<HTMLInputElement>) => {
-    setToken(event.target.value);
-  };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     setRegisterError(undefined);
@@ -90,53 +83,32 @@ export default function Register() {
       .finally(() => setRegisterLoading(false));
   };
 
-  const handleVerify = () => {
-    setVerficationLoading(true);
-    setVerficationError(undefined);
-
+  const onVerificationSuccess = () => {
     const { email } = getValues();
-    VerifyUser({ user_email: email, token: parseInt(token) })
-      .then((res) => {
-        if (res.data.success) {
-          login({ data: { email } });
+    login({ data: { email } });
 
-          if (fromTask) {
-            const sendTaskData = formatTaskDataForApi(task, email);
+    if (fromTask) {
+      const sendTaskData = formatTaskDataForApi(task, email);
 
-            SendTask(sendTaskData)
-              .then((res) => {
-                if (res.data.success)
-                  toast.success("Tarefa enviada com sucesso!");
-                else
-                  toast.error(
-                    "Erro ao enviar a tarefa! Por favor, tente novamente."
-                  );
-              })
-              .catch(() => {
-                toast.error(
-                  "Erro ao enviar a tarefa! Por favor, tente novamente."
-                );
-              })
-              .finally(() => {
-                toast.success("Cadastro concluído com sucesso!");
+      SendTask(sendTaskData)
+        .then((res) => {
+          if (res.data.success) toast.success("Tarefa enviada com sucesso!");
+          else
+            toast.error("Erro ao enviar a tarefa! Por favor, tente novamente.");
+        })
+        .catch(() => {
+          toast.error("Erro ao enviar a tarefa! Por favor, tente novamente.");
+        })
+        .finally(() => {
+          toast.success("Cadastro concluído com sucesso!");
 
-                router.push("/");
-              });
-          } else {
-            toast.success("Cadastro concluído com sucesso!");
+          router.push("/");
+        });
+    } else {
+      toast.success("Cadastro concluído com sucesso!");
 
-            router.push("/");
-          }
-        } else {
-          setVerficationError("A verificação falhou! Tente novamente.");
-        }
-      })
-      .catch(() => {
-        setVerficationError("A verificação falhou! Tente novamente.");
-      })
-      .finally(() => {
-        setVerficationLoading(false);
-      });
+      router.push("/");
+    }
   };
 
   const renderFieldError = (
@@ -166,7 +138,7 @@ export default function Register() {
     setShowPage(true);
   }, []);
 
-  if (!showPage) return null;
+  if (!showPage) return <div></div>;
 
   return (
     <div>
@@ -208,7 +180,7 @@ export default function Register() {
             mask="99/99/9999"
             type="text"
             name="birthday"
-            rules={{ required: true, validate: isDate }}
+            rules={{ required: true, validate: isValidDate }}
             defaultValue=""
             className="form-input mt-2 block w-full"
           />
@@ -303,42 +275,10 @@ export default function Register() {
       </form>
 
       {awaitingVerification && (
-        <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-10">
-          <div className="rounded bg-white p-8 max-w-sm">
-            <h1 className="font-header text-lg text-center">
-              Verifique seu email
-            </h1>
-            <p className="text-center break-normal text-xs mt-2">
-              Nós enviamos um código de confirmação para seu email. Verifique
-              sua caixa de entrada e digite o código abaixo.
-            </p>
-            <label className="block mt-8 text-center">
-              <span>Código</span>
-              <input
-                type="text"
-                maxLength={5}
-                className="form-input mt-2 block w-24 mx-auto text-center"
-                value={token}
-                onChange={changeToken}
-              />
-            </label>
-
-            <button
-              className="block bg-land-green text-white font-header mx-auto mt-8 rounded px-4 py-2 hover:opacity-75"
-              type="submit"
-              disabled={verificationLoading}
-              onClick={handleVerify}
-            >
-              {verificationLoading ? <Spinner size={6} /> : "Verificar"}
-            </button>
-
-            {verificationError && (
-              <span className="block mx-auto mt-4 text-red-400 text-sm text-center">
-                {verificationError}
-              </span>
-            )}
-          </div>
-        </div>
+        <VerifyModal
+          email={watchEmail}
+          verifyCallback={onVerificationSuccess}
+        />
       )}
     </div>
   );

@@ -9,6 +9,7 @@ import { SendTaskData, SendTask } from "../../api/tasks";
 import { toast } from "react-toastify";
 import { formatTaskDataForApi } from "../../utils/tasks";
 import { totalmem } from "os";
+import VerifyModal from "../../components/auth/VerifyModal";
 
 type FormValues = {
   email?: string;
@@ -16,9 +17,15 @@ type FormValues = {
 };
 
 export default function Login() {
-  const { register, handleSubmit, errors, watch, setValue, control } = useForm<
-    FormValues
-  >({
+  const {
+    register,
+    handleSubmit,
+    errors,
+    watch,
+    setValue,
+    control,
+    getValues,
+  } = useForm<FormValues>({
     mode: "all",
   });
   const router = useRouter();
@@ -27,6 +34,10 @@ export default function Login() {
   const task = useStoreState((state) => state.task.data);
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<undefined | string>(undefined);
+  const [awaitingVerification, setAwaitingVerification] = useState<boolean>(
+    false
+  );
+  const watchEmail = watch("email");
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     setLoginError(undefined);
@@ -44,10 +55,11 @@ export default function Login() {
               .then((res) => {
                 if (res.data.success)
                   toast.success("Tarefa enviada com sucesso!");
-                else
+                else {
                   toast.error(
                     "Erro ao enviar a tarefa! Por favor, tente novamente."
                   );
+                }
               })
               .catch(() => {
                 toast.error(
@@ -63,10 +75,14 @@ export default function Login() {
             router.push("/");
           }
         } else {
-          setLoginError(
-            "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
-          );
-          setLoginLoading(false);
+          if (res.data.errors[0].includes("nao confirmado")) {
+            setAwaitingVerification(true);
+          } else {
+            setLoginError(
+              "Oops! Não conseguimos efetuar seu login. Por favor, verifique suas credenciais e tente novamente."
+            );
+            setLoginLoading(false);
+          }
         }
       })
       .catch(() => {
@@ -75,6 +91,34 @@ export default function Login() {
         );
         setLoginLoading(false);
       });
+  };
+
+  const onVerificationSuccess = () => {
+    const { email } = getValues();
+    login({ data: { email } });
+
+    if (fromTask) {
+      const sendTaskData = formatTaskDataForApi(task, email);
+
+      SendTask(sendTaskData)
+        .then((res) => {
+          if (res.data.success) toast.success("Tarefa enviada com sucesso!");
+          else
+            toast.error("Erro ao enviar a tarefa! Por favor, tente novamente.");
+        })
+        .catch(() => {
+          toast.error("Erro ao enviar a tarefa! Por favor, tente novamente.");
+        })
+        .finally(() => {
+          toast.success("Login concluído com sucesso!");
+
+          router.push("/");
+        });
+    } else {
+      toast.success("Login concluído com sucesso!");
+
+      router.push("/");
+    }
   };
 
   const renderFieldError = (
@@ -152,6 +196,12 @@ export default function Login() {
           Não possui cadastro?
         </a>
       </Link>
+      {awaitingVerification && (
+        <VerifyModal
+          email={watchEmail}
+          verifyCallback={onVerificationSuccess}
+        />
+      )}
     </div>
   );
 }
