@@ -26,6 +26,7 @@ type FormValues = {
   password?: string;
   confirmPassword?: string;
   hasWhatsapp?: boolean;
+  ensino?: string;
 };
 
 export default function Register() {
@@ -62,6 +63,7 @@ export default function Register() {
       senha: data.password,
       telefone: data.phone,
       is_whatsapp: data.hasWhatsapp,
+      ensino: data.ensino,
     };
 
     RegisterUser(registerBody)
@@ -182,11 +184,27 @@ export default function Register() {
             name="birthday"
             rules={{ required: true, validate: isValidDate }}
             defaultValue=""
+            placeholder="01/01/1999"
             className="form-input mt-2 block w-full"
           />
           {renderFieldError(
             errors.birthday,
             "Por favor digite seu aniversario"
+          )}
+        </label>
+
+        <label className="block mt-4">
+          <span>Instituição de Ensino</span>
+          <input
+            type="text"
+            name="ensino"
+            ref={register({ required: true, maxLength: 100 })}
+            className="form-input mt-2 block w-full"
+            placeholder="Universidade Federal Fluminense"
+          />
+          {renderFieldError(
+            errors.ensino,
+            "Por favor digite a sua instituição de ensino"
           )}
         </label>
 

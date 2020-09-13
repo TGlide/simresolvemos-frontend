@@ -8,6 +8,7 @@ export type RegisterBody = {
   senha: string;
   telefone: string;
   is_whatsapp: boolean;
+  ensino: string;
 };
 
 type RegisterResponse = {
