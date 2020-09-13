@@ -40,11 +40,13 @@ export default function Blog({ posts, tags }: BlogProps) {
 
   const renderPost = (post: PostItem, index: number, postsLength: number) => {
     return (
-      <div key={post.id}>
-        <h1 className="font-header text-3xl">{post.title}</h1>
+      <a key={post.id} href={post.meta.html_url} target="_blank">
+        <h1 className="font-header text-3xl hover:text-sea-blue">
+          {post.title}
+        </h1>
         <p className="text-xl opacity-75">{post.subtitle}</p>
         {index + 1 != postsLength && <hr className="my-4" />}
-      </div>
+      </a>
     );
   };
 
