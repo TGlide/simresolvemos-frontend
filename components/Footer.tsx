@@ -5,29 +5,31 @@ export function Footer() {
         <span className="flex-grow text-center lg:text-left opacity-75 pb-2 lg:pb-0 border-b lg:border-none">
           2020 © SimResolvemos
         </span>
-        <div className="flex flex-col lg:flex-row items-center mx-auto mt-4 lg:mt-0">
+        <div className="flex flex-row items-center mx-auto mt-4 lg:mt-0">
           <a
             href="mailto:suporte@simresolvemos.com.br"
             className="flex items-center text-sea-blue opacity-75 hover:opacity-50"
           >
             <img src="/vectors/mail.svg" alt="Email" />
-            <span className="ml-2">suporte@simresolvemos.com.br</span>
+            <span className="hidden lg:block ml-2">
+              suporte@simresolvemos.com.br
+            </span>
           </a>
           <a
             href="https://api.whatsapp.com/send?phone=5521972922006"
             target="_blank"
-            className="flex items-center text-sea-blue opacity-75 hover:opacity-50 mt-2 lg:mt-0 lg:ml-8"
+            className="flex items-center text-sea-blue opacity-75 hover:opacity-50 ml-8"
           >
             <img src="/vectors/wpp.svg" alt="Whatsapp" />
-            <span className="ml-2">+55 21 97292-2006</span>
+            <span className="hidden lg:block ml-2">+55 21 97292-2006</span>
           </a>
           <a
             href="https://www.instagram.com/simresolvemos/"
             target="_blank"
-            className="flex items-center text-sea-blue opacity-75 hover:opacity-50 mt-2 lg:mt-0 lg:ml-8"
+            className="flex items-center text-sea-blue opacity-75 hover:opacity-50 ml-8"
           >
             <img src="/vectors/instagram.svg" alt="Instagram" />
-            <span className="ml-2">@simresolvemos</span>
+            <span className="hidden lg:block ml-2">@simresolvemos</span>
           </a>
         </div>
       </div>

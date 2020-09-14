@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -15,18 +16,20 @@ export default function Home() {
             <img
               src="/images/photo_1.png"
               alt="garota estudando"
-              className="hidden lg:block"
+              className="hidden lg:block w-5/12"
             />
             <div className="text-center lg:text-left text-paper-white lg:text-study-black lg:ml-8 mt-32 lg:mt-0">
-              <h1 className="font-header font-semibold text-2xl lg:text-4.5xl">
+              <h1 className="font-header font-semibold text-xl md:text-2xl lg:text-4.5xl">
                 Precisa de ajuda acadêmica?
               </h1>
               <p className="text-xl lg:text-2.5xl">
                 Encontre o professor ideal para você.
               </p>
-              <button className="bg-land-green lg:bg-sea-blue hover:bg-opacity-75 rounded-full font-bold text-paper-white text-xl lg:text-2xl px-6 py-2 mt-4">
-                Me ajuda!
-              </button>
+              <Link href="/tasks">
+                <button className="bg-land-green lg:bg-sea-blue hover:bg-opacity-75 rounded-full font-bold text-paper-white text-xl lg:text-2xl px-6 py-2 mt-4">
+                  Me ajuda!
+                </button>
+              </Link>
             </div>
           </div>
 

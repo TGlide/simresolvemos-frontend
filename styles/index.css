@@ -10,4 +10,59 @@ body {
   @apply box-border;
 }
 
+.tooltip-container {
+  @apply relative;
+}
+
+.tooltip-box {
+  @apply hidden;
+  @apply absolute;
+  @apply bottom-0;
+  @apply mb-6;
+  @apply -ml-1;
+  @apply w-56;
+  @apply opacity-0;
+  @apply transition;
+  @apply ease-in;
+  @apply duration-100;
+}
+
+.tooltip-container:hover {
+  cursor: pointer;
+}
+
+.tooltip-container:hover .tooltip-box {
+  @apply block;
+  @apply opacity-100;
+}
+
+.form-input[disabled],
+.form-select[disabled],
+.form-radio[disabled],
+.form-checkbox[disabled] {
+  cursor: not-allowed !important;
+  opacity: 0.9;
+  @apply bg-gray-100;
+}
+
+.Toastify__toast {
+  @apply font-body;
+  @apply font-semibold;
+}
+
+.Toastify__toast--success {
+  @apply bg-land-green;
+  @apply text-white;
+}
+
+.Toastify__toast--error {
+  @apply bg-red-500;
+  @apply text-white;
+}
+
+button:disabled {
+  @apply bg-opacity-75;
+  @apply cursor-not-allowed;
+}
+
 @tailwind utilities;

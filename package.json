@@ -8,11 +8,20 @@
     "start": "next start"
   },
   "dependencies": {
+    "axios": "^0.20.0",
+    "easy-peasy": "^3.3.1",
+    "luxon": "^1.25.0",
     "next": "9.5.3",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-hook-form": "^6.7.2",
+    "react-input-mask": "^3.0.0-alpha.2",
+    "react-slick": "^0.27.11",
+    "react-toastify": "^6.0.8",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
+    "@tailwindcss/custom-forms": "^0.2.1",
     "@types/node": "^14.6.4",
     "@types/react": "^16.9.49",
     "cz-conventional-changelog": "3.3.0",

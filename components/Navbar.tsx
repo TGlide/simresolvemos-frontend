@@ -1,15 +1,17 @@
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { useStoreState, useStoreActions } from "../store";
+import { toast } from "react-toastify";
 
 const links = [
   {
     name: "Enviar Tarefa",
-    to: "/about",
+    to: "/tasks",
   },
   {
     name: "Trabalhe conosco",
-    to: "/about",
+    to: "/hiring",
   },
   {
     name: "Sobre nós",
@@ -17,17 +19,15 @@ const links = [
   },
   {
     name: "Recursos",
-    to: "/about",
-  },
-  {
-    name: "Login",
-    to: "/about",
+    to: "/blog",
   },
 ];
 
 export function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const router = useRouter();
+  const logged = useStoreState((state) => state.user.logged);
+  const dispatchLogout = useStoreActions((actions) => actions.user.logout);
 
   const extraLinksClass = () => {
     return navbarOpen ? "flex fixed top-0 left-0 bg-white" : "hidden lg:flex";
@@ -39,6 +39,10 @@ export function Navbar() {
       : "/images/logo.png";
   };
 
+  const menuColor = (): string => {
+    return router.pathname === "/" ? "white" : "#222f3e";
+  };
+
   // Handlers
   const handleNavbarOpen = () => {
     setNavbarOpen(true);
@@ -47,6 +51,19 @@ export function Navbar() {
   const handleNavbarClose = () => {
     setNavbarOpen(false);
   };
+
+  const handleLogout = () => {
+    dispatchLogout();
+    setNavbarOpen(false);
+    toast.success("Logout feito com sucesso!");
+    router.push("/");
+  };
+
+  // const handleLogin = () => {
+  //   dispatchLogin({
+  //     type: login ? LoginActions.LOGOUT : LoginActions.LOGIN,
+  //   });
+  // };
 
   return (
     <>
@@ -58,7 +75,22 @@ export function Navbar() {
         </Link>
 
         <button className="lg:hidden ml-auto mt-3" onClick={handleNavbarOpen}>
-          <img src="/vectors/menu.svg" alt="Menu" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={menuColor()}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-menu"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
 
         <div
@@ -68,12 +100,33 @@ export function Navbar() {
             {links.map((link, index) => {
               return (
                 <Link href={link.to} key={index}>
-                  <a className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8">
+                  <a
+                    className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8"
+                    onClick={handleNavbarClose}
+                  >
                     {link.name}
                   </a>
                 </Link>
               );
             })}
+
+            {logged ? (
+              <button
+                className="font-bold border-b-2 border-sea-blue hover:border-opacity-50"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <Link href="/auth/login">
+                <a
+                  className="border-b-2 border-sea-blue hover:border-opacity-50"
+                  onClick={handleNavbarClose}
+                >
+                  Login
+                </a>
+              </Link>
+            )}
           </div>
           <button
             className="lg:hidden ml-auto w-8 h-8"
