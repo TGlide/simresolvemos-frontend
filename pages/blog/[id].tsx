@@ -61,7 +61,10 @@ export default function BlogPost({ posts }: BlogPostProps) {
       <h1 className="font-header text-3xl mt-4">{post.title}</h1>
       <h2 className="text-xl text-gray-600">{post.subtitle}</h2>
 
-      <div dangerouslySetInnerHTML={generatePostBody()} className="mt-4"></div>
+      <div
+        dangerouslySetInnerHTML={generatePostBody()}
+        className="mt-4 pb-8"
+      ></div>
     </div>
   );
 }
