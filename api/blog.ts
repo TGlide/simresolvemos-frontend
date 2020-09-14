@@ -18,11 +18,12 @@ export interface PostItem {
   };
   title: string;
   subtitle: string;
+  body: string;
   tag: { name: string; slug: string };
 }
 
 export function GetPosts(): Promise<AxiosResponse<PostsResponse>> {
   return axios.get(
-    "https://resolvemos-api.herokuapp.com/api/wagtail/pages/?type=blog.BlogFullPage&fields=tag,subtitle&format=json"
+    "https://resolvemos-api.herokuapp.com/api/wagtail/pages/?type=blog.BlogFullPage&fields=tag,subtitle,body&format=json"
   );
 }

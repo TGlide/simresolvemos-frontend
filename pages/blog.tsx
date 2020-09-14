@@ -1,6 +1,7 @@
 import { GetPosts, PostsResponse, PostItem } from "../api/blog";
 import { GetStaticProps } from "next";
 import { useState } from "react";
+import Link from "next/link";
 
 type BlogProps = {
   posts: PostsResponse["items"];
@@ -41,13 +42,15 @@ export default function Blog({ posts, tags }: BlogProps) {
 
   const renderPost = (post: PostItem, index: number, postsLength: number) => {
     return (
-      <a key={post.id} href={post.meta.html_url} target="_blank">
-        <h1 className="font-header text-3xl hover:text-sea-blue">
-          {post.title}
-        </h1>
-        <p className="text-xl opacity-75">{post.subtitle}</p>
-        {index + 1 != postsLength && <hr className="my-4" />}
-      </a>
+      <Link key={post.id} href={`/blog/${post.id}`}>
+        <a>
+          <h1 className="font-header text-3xl hover:text-sea-blue">
+            {post.title}
+          </h1>
+          <p className="text-xl opacity-75">{post.subtitle}</p>
+          {index + 1 != postsLength && <hr className="my-4" />}
+        </a>
+      </Link>
     );
   };
 
