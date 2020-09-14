@@ -94,7 +94,7 @@ export default function Hiring() {
           <input
             type="text"
             name="name"
-            ref={register({ required: true })}
+            ref={register({ required: true, maxLength: 100 })}
             className="form-input mt-2 block w-full"
             placeholder="John Doe"
           />

@@ -167,7 +167,7 @@ export default function Register() {
           <input
             type="text"
             name="name"
-            ref={register({ required: true })}
+            ref={register({ required: true, maxLength: 100 })}
             className="form-input mt-2 block w-full"
             placeholder="John Doe"
           />
@@ -254,7 +254,7 @@ export default function Register() {
           <input
             type="password"
             name="password"
-            ref={register({ required: true, minLength: 6 })}
+            ref={register({ required: true, minLength: 6, maxLength: 100 })}
             className="form-input mt-2 block w-full"
           />
           {renderFieldError(errors.password, "Por favor digite sua senha")}
