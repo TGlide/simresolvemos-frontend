@@ -10,8 +10,15 @@ type BlogProps = {
 
 export const getStaticProps: GetStaticProps = async () => {
   const res = await GetPosts();
-  const posts = await res.data.items;
-  const tags = posts.map((post) => post.tag.name);
+  const posts = res.data?.items || [];
+  const tagsSet = new Set();
+  posts
+    .map((post) => post?.tag?.name)
+    .filter((tag) => tag !== undefined && tag !== null)
+    .forEach((tag) => tagsSet.add(tag));
+
+  const tags = Array.from(tagsSet);
+  tags.sort();
 
   return {
     props: {
@@ -58,7 +65,7 @@ export default function Blog({ posts, tags }: BlogProps) {
     let selectedPosts = [...posts];
     if (selectedTag) {
       selectedPosts = selectedPosts.filter(
-        (post) => post.tag.name === selectedTag
+        (post) => post.tag?.name === selectedTag
       );
     }
 

@@ -1,17 +1,34 @@
 import { StoreProvider } from "easy-peasy";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-
 import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import store from "../store";
 import "../styles/index.css";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   return (
     <StoreProvider store={store}>
+      <Head>
+        <title>SimResolvemos</title>
+        <meta
+          name="description"
+          content="A SimResolvemos busca auxiliar os alunos em seus estudos por
+      meio de resoluções e vídeos explicativos,trazendo praticidade à todos."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="SimResolvemos" />
+        <meta
+          property="og:description"
+          content="Auxiliando seus estudos,
+      trazendo praticidade à todos."
+        />
+        <meta property="og:image" content="images/logo_icon.png " />
+        <link rel="shortcut icon" href="images/favicon.ico " />
+      </Head>
       <div className="min-h-screen flex flex-col">
         <div className="relative lg:container lg:px-12 flex-grow">
           <Navbar />
