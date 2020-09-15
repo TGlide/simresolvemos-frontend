@@ -51,7 +51,7 @@ export default function StepTwo({
         <input
           type="text"
           name="title"
-          ref={register({ required: true })}
+          ref={register({ required: true, maxLength: 100 })}
           className="form-input mt-2 block w-full"
         />
         {renderFieldError(
