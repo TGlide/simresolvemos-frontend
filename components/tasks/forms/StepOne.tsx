@@ -41,7 +41,7 @@ export default function StepOne({ onSubmit, defaultValues }: StepProps) {
         <input
           type="text"
           name="area"
-          ref={register({ required: true, maxLength: 100 })}
+          ref={register({ required: true, maxLength: 50 })}
           placeholder="Engenharia, Direito..."
           className="form-input mt-2 block w-full"
         />
@@ -52,7 +52,7 @@ export default function StepOne({ onSubmit, defaultValues }: StepProps) {
         <input
           type="text"
           name="subject"
-          ref={register({ required: true, maxLength: 100 })}
+          ref={register({ required: true, maxLength: 50 })}
           placeholder="Cálculo, Fisiologia..."
           className="form-input mt-2 block w-full"
         />
@@ -66,7 +66,7 @@ export default function StepOne({ onSubmit, defaultValues }: StepProps) {
         <input
           type="text"
           name="level"
-          ref={register({ required: true, maxLength: 100 })}
+          ref={register({ required: true, maxLength: 30 })}
           placeholder="Ensino Médio, Faculdade..."
           className="form-input mt-2 block w-full"
         />

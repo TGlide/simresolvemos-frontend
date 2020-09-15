@@ -167,7 +167,7 @@ export default function Register() {
           <input
             type="text"
             name="name"
-            ref={register({ required: true, maxLength: 100 })}
+            ref={register({ required: true, maxLength: 30 })}
             className="form-input mt-2 block w-full"
             placeholder="John Doe"
           />
