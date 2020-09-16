@@ -11,7 +11,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [
       ...posts.map((post) => {
-        return { params: { id: `${post.id}` } };
+        return { params: { id: `${post?.id}` } };
       }),
     ],
     fallback: true,
@@ -37,6 +37,13 @@ type BlogPostProps = {
 export default function BlogPost({ posts }: BlogPostProps) {
   const router = useRouter();
   const { id } = router.query;
+  
+  if (router.isFallback) {
+    return (
+      <div className="grid place-items-center w-full h-64">Carregando...</div>
+    );
+  }
+
   const post = posts.filter((p) => id.includes(`${p.id}`))[0];
 
   const generatePostBody = () => {
@@ -49,11 +56,6 @@ export default function BlogPost({ posts }: BlogPostProps) {
     return { __html: result };
   };
 
-  if (router.isFallback) {
-    return (
-      <div className="grid place-items-center w-full h-64">Carregando...</div>
-    );
-  }
 
   return (
     <div>
