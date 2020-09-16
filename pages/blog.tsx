@@ -34,10 +34,15 @@ export default function Blog({ posts, tags }: BlogProps) {
   const [filterOpen, setFilterOpen] = useState(false);
 
   const renderTag = (tag: string) => {
+    const handleClick = () => {
+      setSelectedTag(tag);
+      setFilterOpen(false);
+    };
+
     return (
       <button
         key={tag}
-        onClick={() => setSelectedTag(tag)}
+        onClick={handleClick}
         className={`text-left ${
           tag === selectedTag && "text-sea-blue font-semibold"
         } mt-2`}
