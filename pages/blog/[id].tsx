@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import { GetStaticProps } from "next";
+import { GetStaticProps, GetStaticPaths } from "next";
 import { GetPosts, PostsResponse } from "../../api/blog";
 import Link from "next/link";
 import { useRef } from "react";
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const res = await GetPosts();
   const posts = await res.data.items;
 
@@ -14,9 +14,9 @@ export async function getStaticPaths() {
         return { params: { id: `${post.id}` } };
       }),
     ],
-    fallback: false,
+    fallback: true,
   };
-}
+};
 
 export const getStaticProps: GetStaticProps = async () => {
   const res = await GetPosts();
@@ -48,6 +48,12 @@ export default function BlogPost({ posts }: BlogPostProps) {
 
     return { __html: result };
   };
+
+  if (router.isFallback) {
+    return (
+      <div className="grid place-items-center w-full h-64">Carregando...</div>
+    );
+  }
 
   return (
     <div>
