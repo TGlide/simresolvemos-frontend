@@ -117,7 +117,10 @@ export default function Blog({ posts, tags }: BlogProps) {
           </div>
 
           <button
-            onClick={() => setSelectedTag(undefined)}
+            onClick={() => {
+              setSelectedTag(undefined);
+              setFilterOpen(false);
+            }}
             className={`text-left ${
               selectedTag === undefined && "text-sea-blue font-semibold"
             }`}
