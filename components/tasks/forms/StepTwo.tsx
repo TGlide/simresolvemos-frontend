@@ -152,10 +152,16 @@ export default function StepTwo({
           ref={register({ required: true })}
           name="agreeTerms"
         />
-        <span className="text-sm opacity-75 ml-2">
-          Estou ciente que a tarefa será realizada usando de base as informações
-          enviadas. Para que sua tarefa seja feita com excelência envie todas as
-          informações corretas e necessárias.
+        <span className="ml-2">
+          Eu concordo com os{" "}
+          <a
+            href="https://docs.google.com/document/d/1aG4nVqYUHH7TgNRGrmf6aAsp6Mga_sgBN8OmEhVqAoc/edit?usp=sharing"
+            target="_black"
+            className="text-sea-blue hover:opacity-75 cursor-pointer"
+          >
+            termos e condições
+          </a>
+          .
         </span>
       </label>
     </StepLayout>
