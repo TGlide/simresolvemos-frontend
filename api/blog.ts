@@ -24,6 +24,6 @@ export interface PostItem {
 
 export function GetPosts(): Promise<AxiosResponse<PostsResponse>> {
   return axios.get(
-    "https://resolvemos-api.herokuapp.com/api/wagtail/pages/?type=blog.BlogFullPage&fields=tag,subtitle,body&format=json"
+    "https://resolvemos-api.herokuapp.com/api/wagtail/pages/?type=blog.BlogFullPage&fields=tag,subtitle,body&format=json&limit=42069"
   );
 }
