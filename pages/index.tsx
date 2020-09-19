@@ -5,7 +5,11 @@ export default function Home() {
   return (
     <>
       <div className={`${styles.wave} hidden lg:block`}>
-        <img src="/images/wave.png" alt="Onda" className="block" />
+        <picture>
+          <source srcSet="/images/wave.webp" type="image/webp" />
+          <source srcSet="/images/wave.png" type="image/png" />
+          <img src="/images/wave.png" alt="Onda" className="block" />
+        </picture>
       </div>
 
       <div
@@ -13,11 +17,11 @@ export default function Home() {
       >
         <div className="">
           <div className="flex justify-center items-center py-40">
-            <img
-              src="/images/photo_1.png"
-              alt="garota estudando"
-              className="hidden lg:block w-5/12"
-            />
+            <picture className="hidden lg:block w-5/12">
+              <source srcSet="/images/photo.webp" type="image/webp" />
+              <source srcSet="/images/photo_1.png" type="image/png" />
+              <img src="/images/photo_1.png" alt="garota estudando" />
+            </picture>
             <div className="text-center lg:text-left text-paper-white lg:text-study-black lg:ml-8 mt-32 lg:mt-0">
               <h1 className="font-header font-semibold text-xl md:text-2xl lg:text-4.5xl">
                 Precisa de ajuda acadêmica?

@@ -101,7 +101,7 @@ export function Navbar() {
               return (
                 <Link href={link.to} key={index}>
                   <a
-                    className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8"
+                    className="border-b-2 border-sea-blue hover:border-opacity-50 mr-8 mb-2 lg:mt-0"
                     onClick={handleNavbarClose}
                   >
                     {link.name}
@@ -131,6 +131,7 @@ export function Navbar() {
           <button
             className="lg:hidden ml-auto w-8 h-8"
             onClick={handleNavbarClose}
+            aria-label="Fechar"
           >
             <img src="/vectors/times.svg" alt="Close" />
           </button>
