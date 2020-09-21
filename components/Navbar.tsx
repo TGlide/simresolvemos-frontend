@@ -112,7 +112,7 @@ export function Navbar() {
 
             {logged ? (
               <button
-                className="font-bold border-b-2 border-sea-blue hover:border-opacity-50"
+                className="font-bold border-b-2 border-sea-blue hover:border-opacity-50 mb-2"
                 onClick={handleLogout}
               >
                 Logout
@@ -120,7 +120,7 @@ export function Navbar() {
             ) : (
               <Link href="/auth/login">
                 <a
-                  className="border-b-2 border-sea-blue hover:border-opacity-50"
+                  className="border-b-2 border-sea-blue hover:border-opacity-50 mb-2"
                   onClick={handleNavbarClose}
                 >
                   Login
