@@ -37,14 +37,16 @@ type BlogPostProps = {
 export default function BlogPost({ posts }: BlogPostProps) {
   const router = useRouter();
   const { id } = router.query;
-  
+
   if (router.isFallback) {
     return (
       <div className="grid place-items-center w-full h-64">Carregando...</div>
     );
   }
 
-  const post = posts.filter((p) => id.includes(`${p.id}`))[0];
+  const postId = typeof id === "string" ? id : id[0];
+
+  const post = posts.filter((p) => `${p.id}` === postId)[0];
 
   const generatePostBody = () => {
     let result = post.body;
@@ -55,7 +57,6 @@ export default function BlogPost({ posts }: BlogPostProps) {
 
     return { __html: result };
   };
-
 
   return (
     <div>
