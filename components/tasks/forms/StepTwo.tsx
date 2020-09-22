@@ -1,5 +1,5 @@
 import { useForm, FieldError, Controller } from "react-hook-form";
-import { ReactNode, FormEvent, ChangeEvent, useState } from "react";
+import { ReactNode, FormEvent, ChangeEvent, useState, useEffect } from "react";
 import StepLayout, { renderFieldError } from "./StepLayout";
 import Tooltip from "../../shared/Tooltip";
 import InputMask from "react-input-mask";
@@ -34,12 +34,15 @@ export default function StepTwo({
   const watchFiles = watch("files");
   const watchWantVideo = watch("wantVideo");
   const [filesError, setFilesError] = useState<boolean>(false);
+  const [filesTotal, setFilesTotal] = useState(0);
 
   // Handlers
   const onFilesChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files.length > 10) {
       setFilesError(true);
+      setFilesTotal(0);
     } else {
+      setFilesTotal(event.target.files.length);
       setFilesError(false);
     }
   };
@@ -86,7 +89,7 @@ export default function StepTwo({
         />
         <span className="text-sm flex items-center mt-1 font-bold">
           <img src="/vectors/file.svg" alt="Arquivos" className="w-4 mr-1" />{" "}
-          {watchFiles?.length || 0}
+          {filesTotal}
           /10
         </span>
         {filesError && (
