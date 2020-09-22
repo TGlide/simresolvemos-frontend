@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, ChangeEvent } from "react";
 import {
   Controller,
   FieldError,
@@ -29,10 +29,19 @@ export default function Hiring() {
   const [showPage, setShowPage] = useState(false);
   const router = useRouter();
   const [buttonLoading, setButtonloading] = useState(false);
+  const [resumeName, setResumeName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     setShowPage(true);
   }, []);
+
+  const handleResumeChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.files.length === 1) {
+      setResumeName(event.target.files[0].name);
+    } else {
+      setResumeName(undefined);
+    }
+  };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     setButtonloading(true);
@@ -141,10 +150,11 @@ export default function Hiring() {
             type="file"
             name="resume"
             className="hidden"
+            onChange={handleResumeChange}
           />
           <span className="text-sm flex items-center mt-1 font-bold">
             <img src="/vectors/file.svg" alt="Arquivos" className="w-4 mr-1" />
-            {watchResume?.[0]?.name || "Nenhum arquivo selecionado."}
+            {resumeName || "Nenhum arquivo selecionado."}
           </span>
           {renderFieldError(
             errors.resume as any,
