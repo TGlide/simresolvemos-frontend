@@ -17,6 +17,7 @@ type FormValues = {
   email?: string;
   phone?: string;
   resume?: FileList;
+  agreeTerms: boolean;
 };
 
 export default function Hiring() {
@@ -161,6 +162,25 @@ export default function Hiring() {
             "Por favor envie seu currículo"
           )}
         </label>
+
+        <label className="inline-flex items-start mt-4 cursor-pointer">
+        <input
+          type="checkbox"
+          className="form-checkbox text-land-green mt-1"
+          ref={register({ required: true })}
+          name="agreeTerms"
+        />
+        <span className="ml-2">
+          Eu concordo com os{" "}
+          <a
+            href="https://docs.google.com/document/d/1aG4nVqYUHH7TgNRGrmf6aAsp6Mga_sgBN8OmEhVqAoc/edit?usp=sharing"
+            target="_black"
+            className="text-sea-blue hover:opacity-75 cursor-pointer"
+          >
+            termos e condições
+          </a>
+        </span>
+      </label>
 
         <button
           className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2 hover:opacity-75"
