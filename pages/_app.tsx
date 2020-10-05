@@ -8,6 +8,7 @@ import { Navbar } from "../components/Navbar";
 import store from "../store";
 import "../styles/index.css";
 import Head from "next/head";
+import MainPixel from "../components/pixel/mainPixel";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -28,6 +29,7 @@ function MyApp({ Component, pageProps }) {
         />
         <meta property="og:image" content="images/logo_icon.png " />
         <link rel="shortcut icon" href="images/favicon.ico " />
+        <MainPixel />
       </Head>
       <div className="min-h-screen flex flex-col">
         <div className="relative lg:container lg:px-12 flex-grow">
