@@ -8,7 +8,7 @@ import { Navbar } from "../components/Navbar";
 import store from "../store";
 import "../styles/index.css";
 import Head from "next/head";
-import MainPixel from "../components/pixel/mainPixel";
+import MainPixel from "../components/pixel/MainPixel";
 
 function MyApp({ Component, pageProps }) {
   return (
