@@ -100,30 +100,40 @@ export default function Tasks() {
   };
 
   return (
-    <div>
-      <header className="flex justify-center items-center mt-4">
-        <img src="/vectors/notebook.svg" alt="caderno" className="w-16 h-16" />
-        <h1 className="font-header font-bold text-4xl ml-4">Enviar tarefa</h1>
-      </header>
+    <div className="relative lg:container lg:px-12 flex-grow">
+      <div className="h-full">
+        <div>
+          <header className="flex justify-center items-center mt-4">
+            <img
+              src="/vectors/notebook.svg"
+              alt="caderno"
+              className="w-16 h-16"
+            />
+            <h1 className="font-header font-bold text-4xl ml-4">
+              Enviar tarefa
+            </h1>
+          </header>
 
-      {/* Steps */}
-      <div className="flex justify-center items-center mt-4">
-        {renderSteps()}
+          {/* Steps */}
+          <div className="flex justify-center items-center mt-4">
+            {renderSteps()}
+          </div>
+
+          {stepNumber === 0 && (
+            <StepOne
+              onSubmit={handleSubmitStep}
+              defaultValues={stepsData[0] || undefined}
+            />
+          )}
+          {stepNumber === 1 && (
+            <StepTwo
+              buttonLoading={buttonLoading}
+              onSubmit={handleSubmitStep}
+              defaultValues={stepsData[1] || undefined}
+            />
+          )}
+        </div>
       </div>
-
-      {stepNumber === 0 && (
-        <StepOne
-          onSubmit={handleSubmitStep}
-          defaultValues={stepsData[0] || undefined}
-        />
-      )}
-      {stepNumber === 1 && (
-        <StepTwo
-          buttonLoading={buttonLoading}
-          onSubmit={handleSubmitStep}
-          defaultValues={stepsData[1] || undefined}
-        />
-      )}
     </div>
   );
 }

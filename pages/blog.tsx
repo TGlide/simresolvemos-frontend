@@ -80,56 +80,62 @@ export default function Blog({ posts, tags }: BlogProps) {
   };
 
   return (
-    <div>
-      <header className="flex justify-center items-center mt-4 ">
-        <h1 className="font-header font-bold text-4xl">Blog</h1>
-      </header>
+    <div className="relative lg:container lg:px-12 flex-grow">
+      <div className="h-full">
+        <div>
+          <header className="flex justify-center items-center mt-4 ">
+            <h1 className="font-header font-bold text-4xl">Blog</h1>
+          </header>
 
-      <button
-        className="block lg:hidden mx-auto border-b-2 border-solid border-sea-blue font-bold mt-2"
-        onClick={() => setFilterOpen(true)}
-      >
-        Filtrar por tags
-      </button>
+          <button
+            className="block lg:hidden mx-auto border-b-2 border-solid border-sea-blue font-bold mt-2"
+            onClick={() => setFilterOpen(true)}
+          >
+            Filtrar por tags
+          </button>
 
-      <div
-        className="lg:grid mt-8 mb-8"
-        style={{
-          gridTemplateColumns: "minmax(150px, 25%) 1fr",
-          minHeight: "50vh",
-        }}
-      >
-        <div
-          className={`fixed top-0 left-0 bg-white lg:bg-transparent
+          <div
+            className="lg:grid mt-8 mb-8"
+            style={{
+              gridTemplateColumns: "minmax(150px, 25%) 1fr",
+              minHeight: "50vh",
+            }}
+          >
+            <div
+              className={`fixed top-0 left-0 bg-white lg:bg-transparent
           z-10 w-screen lg:w-auto h-screen lg:h-auto pl-4 lg:pl-0 pt-4 lg:pt-0 lg:relative 
           ${
             filterOpen ? "flex" : "hidden lg:flex"
           } flex-col lg:border-r border-solid border-gray-300 pr-4 lg:pr-8 mr-8`}
-        >
-          <div className="flex justify-between items-center">
-            <h1 className="text-gray-500 font-bold mb-4">Filtrar por tags</h1>
-            <button
-              className="lg:hidden mb-3"
-              onClick={() => setFilterOpen(false)}
             >
-              <img src="/vectors/times.svg" alt="Close" />
-            </button>
-          </div>
+              <div className="flex justify-between items-center">
+                <h1 className="text-gray-500 font-bold mb-4">
+                  Filtrar por tags
+                </h1>
+                <button
+                  className="lg:hidden mb-3"
+                  onClick={() => setFilterOpen(false)}
+                >
+                  <img src="/vectors/times.svg" alt="Close" />
+                </button>
+              </div>
 
-          <button
-            onClick={() => {
-              setSelectedTag(undefined);
-              setFilterOpen(false);
-            }}
-            className={`text-left ${
-              selectedTag === undefined && "text-sea-blue font-semibold"
-            }`}
-          >
-            Sem filtro
-          </button>
-          {tags.map((tag) => renderTag(tag))}
+              <button
+                onClick={() => {
+                  setSelectedTag(undefined);
+                  setFilterOpen(false);
+                }}
+                className={`text-left ${
+                  selectedTag === undefined && "text-sea-blue font-semibold"
+                }`}
+              >
+                Sem filtro
+              </button>
+              {tags.map((tag) => renderTag(tag))}
+            </div>
+            <div>{renderPosts()}</div>
+          </div>
         </div>
-        <div>{renderPosts()}</div>
       </div>
     </div>
   );

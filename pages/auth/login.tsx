@@ -133,75 +133,81 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <header className="flex justify-center items-center mt-4">
-        <h1 className="font-header font-bold text-4xl ml-4">Login</h1>
-      </header>
+    <div className="relative lg:container lg:px-12 flex-grow">
+      <div className="h-full">
+        <div>
+          <header className="flex justify-center items-center mt-4">
+            <h1 className="font-header font-bold text-4xl ml-4">Login</h1>
+          </header>
 
-      {fromTask && (
-        <p className="max-w-3xl mx-auto text-center text-sm opacity-75 mt-2">
-          Faça seu login, ou se{" "}
-          <Link href="/auth/register?fromTask=true">
-            <a className="text-sea-blue underline hover:opacity-75">cadastre</a>
-          </Link>{" "}
-          para enviar a tarefa!
-        </p>
-      )}
+          {fromTask && (
+            <p className="max-w-3xl mx-auto text-center text-sm opacity-75 mt-2">
+              Faça seu login, ou se{" "}
+              <Link href="/auth/register?fromTask=true">
+                <a className="text-sea-blue underline hover:opacity-75">
+                  cadastre
+                </a>
+              </Link>{" "}
+              para enviar a tarefa!
+            </p>
+          )}
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
-      >
-        <label className="block">
-          <span>Email</span>
-          <input
-            disabled={loginLoading}
-            type="text"
-            name="email"
-            ref={register({ required: true })}
-            className="form-input mt-2 block w-full"
-            placeholder="john.doe@mail.com"
-          />
-          {renderFieldError(errors.email, "Por favor digite seu email")}
-        </label>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="max-w-lg mx-auto mt-8 border-2 border-gray-400 border-solid rounded-lg p-6"
+          >
+            <label className="block">
+              <span>Email</span>
+              <input
+                disabled={loginLoading}
+                type="text"
+                name="email"
+                ref={register({ required: true })}
+                className="form-input mt-2 block w-full"
+                placeholder="john.doe@mail.com"
+              />
+              {renderFieldError(errors.email, "Por favor digite seu email")}
+            </label>
 
-        <label className="block mt-4">
-          <span>Senha</span>
-          <input
-            disabled={loginLoading}
-            type="password"
-            name="password"
-            ref={register({ required: true })}
-            className="form-input mt-2 block w-full"
-          />
-          {renderFieldError(errors.password, "Por favor digite sua senha")}
-        </label>
+            <label className="block mt-4">
+              <span>Senha</span>
+              <input
+                disabled={loginLoading}
+                type="password"
+                name="password"
+                ref={register({ required: true })}
+                className="form-input mt-2 block w-full"
+              />
+              {renderFieldError(errors.password, "Por favor digite sua senha")}
+            </label>
 
-        <button
-          disabled={loginLoading}
-          className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2  hover:opacity-75"
-          type="submit"
-        >
-          {loginLoading ? <Spinner size={8} /> : "Entrar"}
-        </button>
-        {loginError && (
-          <span className="block mx-auto mt-4 text-red-400 text-sm text-center">
-            {loginError}
-          </span>
-        )}
-      </form>
+            <button
+              disabled={loginLoading}
+              className="block bg-land-green text-white font-header font-bold mx-auto mt-8 rounded px-4 py-2  hover:opacity-75"
+              type="submit"
+            >
+              {loginLoading ? <Spinner size={8} /> : "Entrar"}
+            </button>
+            {loginError && (
+              <span className="block mx-auto mt-4 text-red-400 text-sm text-center">
+                {loginError}
+              </span>
+            )}
+          </form>
 
-      <Link href={`/auth/register${fromTask ? "?fromTask=true" : ""}`}>
-        <a className="block text-center mt-8 text-sea-blue underline hover:opacity-75">
-          Não possui cadastro?
-        </a>
-      </Link>
-      {awaitingVerification && (
-        <VerifyModal
-          email={watchEmail}
-          verifyCallback={onVerificationSuccess}
-        />
-      )}
+          <Link href={`/auth/register${fromTask ? "?fromTask=true" : ""}`}>
+            <a className="block text-center mt-8 text-sea-blue underline hover:opacity-75">
+              Não possui cadastro?
+            </a>
+          </Link>
+          {awaitingVerification && (
+            <VerifyModal
+              email={watchEmail}
+              verifyCallback={onVerificationSuccess}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
